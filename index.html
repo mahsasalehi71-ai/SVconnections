@@ -1,262 +1,280 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>آزمایشگاه تعاملی ریاضیات</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آزمایشگاه تعاملی حجم و مساحت</title>
 <style>
-
-html,body{direction:rtl;unicode-bidi:embed;}
-input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;text-align:right;}
-.result-item{gap:10px;}
-.result-value{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;direction:ltr;text-align:left;}
-#dimensions{direction:rtl;text-align:right;display:inline-block;}
-.unit{white-space:nowrap;}
-
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:"Vazirmatn",sans-serif;
+:root {
+  color-scheme: light;
+  --ink: #142b31;
+  --muted: #4a6268;
+  --accent: #006858;
+  --accent-hover: #005143;
+  --line: #d5e4e1;
+  --wash: #edf6f3;
+  --paper: #fff;
+  --background: #f3f8f6;
+  font-family: "Vazirmatn", "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+  line-height: 1.65;
 }
-
-body{
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden;
-direction:rtl;
-text-align:center;
-color:white;
-
-background:linear-gradient(-45deg,
-#0f2027,#203a43,#2c5364,#6a11cb,
-#2575fc,#11998e,#38ef7d,#ff512f,#dd2476);
-
-background-size:800% 800%;
-animation:gradientShift 25s ease infinite;
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--background); }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible, canvas:focus-visible {
+  outline: 3px solid #008674;
+  outline-offset: 3px;
 }
+[hidden] { display: none !important; }
 
-.container{
-width:560px;
-max-width:92%;
-padding:60px 45px;
-border-radius:30px;
-
-background:rgba(255,255,255,0.15);
-backdrop-filter:blur(30px);
-
-border:1px solid rgba(255,255,255,0.35);
-
-box-shadow:0 35px 90px rgba(0,0,0,0.45);
+.shell-header { background: var(--paper); border-bottom: 1px solid var(--line); }
+.header-inner {
+  width: min(1160px, 100% - 40px);
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-inline: auto;
 }
-
-h1{
-font-size:30px;
-margin-bottom:10px;
-font-weight:900;
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.brand-icon {
+  width: 38px; height: 38px; display: grid; place-items: center;
+  border-radius: 11px; background: var(--accent); color: white;
+  font: 700 24px/1 Arial, sans-serif;
 }
-
-.subtitle{
-font-size:20px;
-margin-bottom:25px;
+.author { color: var(--muted); font-size: 0.94rem; margin: 0; }
+.home { width: min(1160px, 100% - 40px); margin: clamp(36px, 7vh, 84px) auto 44px; }
+.hero {
+  padding: clamp(28px, 5vw, 60px);
+  color: white;
+  background: radial-gradient(ellipse at 12% 10%, #1b6b5d, transparent 66%), #103a35;
+  border-radius: 26px;
 }
-
-.author{
-font-size:14px;
-margin-bottom:25px;
+.hero h1 { font-size: clamp(2.1rem, 5vw, 4rem); line-height: 1.38; margin: 0; }
+.hero p { color: #d8eeea; font-size: clamp(1.05rem, 2vw, 1.22rem); margin: 14px 0 0; }
+h2 { font-size: clamp(1.4rem, 2.8vw, 1.75rem); margin: 32px 0 14px; }
+.shapes { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.shape-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  padding: 8px;
+  text-align: start;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 4px 15px #173d3009;
 }
-
-select{
-width:100%;
-padding:15px;
-border-radius:14px;
-border:none;
-font-size:16px;
-margin-bottom:25px;
+.shape-card:hover { border-color: var(--accent); box-shadow: 0 5px 18px #173d3019; }
+.shape-preview { display: block; width: 100%; height: auto; background: var(--tile); border-radius: 11px; }
+.shape-name {
+  display: flex; align-items: center; justify-content: space-between; gap: 5px;
+  padding: 12px 5px 8px;
+  font-size: clamp(1rem, 1.65vw, 1.22rem); font-weight: 700;
 }
-
-.startBtn{
-width:100%;
-padding:16px;
-border:none;
-border-radius:14px;
-font-size:17px;
-font-weight:700;
-cursor:pointer;
-
-background:linear-gradient(45deg,#00c6ff,#0072ff);
-color:white;
+.shape-name span { color: var(--accent); }
+.back {
+  min-height: 44px; padding: 6px 14px; color: var(--accent);
+  background: var(--wash); border: 1px solid var(--line); border-radius: 11px;
+  font-weight: 700;
 }
-
-/* دکمه بازگشت */
-
-.back{
-position:fixed;
-bottom:15px;
-left:15px;
-top:auto;
-
-padding:4px 10px;
-
-border:none;
-border-radius:20px;
-
-background:#ff4b2b;
-color:white;
-
-cursor:pointer;
-
-display:inline-block;
-width:auto;
-min-width:0;
-max-width:fit-content;
-
-font-size:11px;
-font-weight:500;
-
-box-shadow:0 2px 5px rgba(0,0,0,0.2);
-
-opacity:0.8;
-transition:opacity 0.2s;
-
-z-index:10000;
-
-display:none;
-}
-
-.back:hover{
-opacity:1;
-}
-
-iframe{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-border:none;
-display:none;
-background:white;
-z-index:999;
-}
-
-@keyframes gradientShift{
-0%{background-position:0% 50%}
-50%{background-position:100% 50%}
-100%{background-position:0% 50%}
+.back:hover { background: #e0f0eb; }
+.lab-active .author { display: none; }
+.lab-active { height: 100dvh; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+iframe { display: block; width: 100%; height: 100%; border: 0; }
+@media (max-width: 820px) { .shapes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 525px) {
+  .header-inner, .home { width: calc(100% - 28px); }
+  .header-inner { min-height: 64px; gap: 8px; }
+  .brand-icon { display: none; }
+  .author { font-size: 0.84rem; }
+  .hero { border-radius: 20px; }
+  .shapes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 }
 
 </style>
 </head>
-
 <body>
+<header class="shell-header">
+  <div class="header-inner">
+    <span class="brand"><span class="brand-icon" aria-hidden="true">∠</span>آزمایشگاه ریاضیات</span>
+    <p class="author">طراح مهسا صالحی</p>
+    <button type="button" id="backBtn" class="back" hidden>بازگشت به شکل‌ها <span aria-hidden="true">↵</span></button>
+  </div>
+</header>
+<main class="home" id="home">
+  <section class="hero">
+    <h1>آزمایشگاه حجم و مساحت</h1>
+    <p>ابعاد شکل را تغییر بده و ببین مساحت و حجم آن چطور عوض می‌شود.</p>
+  </section>
+  <h2>یک شکل انتخاب کن</h2>
+  <div class="shapes">
+    <button type="button" class="shape-card" data-shape="pyramid" data-name="هرم منتظم">
+      <canvas class="shape-preview" width="304" height="200" style="--tile:#e7f3ec" aria-hidden="true"></canvas>
+      <span class="shape-name">هرم منتظم<span aria-hidden="true">←</span></span>
+    </button>
+<button type="button" class="shape-card" data-shape="prism" data-name="منشور منتظم">
+      <canvas class="shape-preview" width="304" height="200" style="--tile:#e3f1f1" aria-hidden="true"></canvas>
+      <span class="shape-name">منشور منتظم<span aria-hidden="true">←</span></span>
+    </button>
+<button type="button" class="shape-card" data-shape="cube" data-name="مکعب‌مستطیل">
+      <canvas class="shape-preview" width="304" height="200" style="--tile:#eaf2e7" aria-hidden="true"></canvas>
+      <span class="shape-name">مکعب‌مستطیل<span aria-hidden="true">←</span></span>
+    </button>
+<button type="button" class="shape-card" data-shape="cylinder" data-name="استوانه">
+      <canvas class="shape-preview" width="304" height="200" style="--tile:#e6f1f5" aria-hidden="true"></canvas>
+      <span class="shape-name">استوانه<span aria-hidden="true">←</span></span>
+    </button>
+<button type="button" class="shape-card" data-shape="cone" data-name="مخروط">
+      <canvas class="shape-preview" width="304" height="200" style="--tile:#e8f2ea" aria-hidden="true"></canvas>
+      <span class="shape-name">مخروط<span aria-hidden="true">←</span></span>
+    </button>
+  </div>
+</main>
+<iframe id="viewer" title="نمای آزمایشگاه" hidden></iframe>
+<script type="text/plain" id="labStyles">
+:root {
+  color-scheme: light;
+  --ink: #142b31;
+  --muted: #4a6268;
+  --accent: #006858;
+  --accent-hover: #005143;
+  --line: #d5e4e1;
+  --wash: #edf6f3;
+  --paper: #fff;
+  --background: #f3f8f6;
+  font-family: "Vazirmatn", "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+  line-height: 1.65;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--background); }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible, canvas:focus-visible {
+  outline: 3px solid #008674;
+  outline-offset: 3px;
+}
+[hidden] { display: none !important; }
 
-<div class="container" id="home">
+body { padding: clamp(12px, 3vw, 30px); }
+.container { max-width: 1160px; margin-inline: auto; }
+h1 { font-size: clamp(1.75rem, 4vw, 2.65rem); margin: 0 0 16px; line-height: 1.45; }
+h2 { font-size: 1.2rem; margin: 0 0 12px; }
+.two-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(290px, 0.82fr);
+  grid-template-areas: "drawing controls";
+  gap: clamp(12px, 2vw, 22px);
+  align-items: start;
+}
+.input-panel, .drawing-panel {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  padding: clamp(12px, 2vw, 20px);
+  background: var(--paper);
+}
+.input-panel { grid-area: controls; }
+.drawing-panel { grid-area: drawing; }
+.input-group { margin-bottom: 12px; }
+label { display: block; font-size: 1rem; font-weight: 700; margin-bottom: 5px; }
+input, select {
+  width: 100%; min-height: 46px; padding: 7px 11px;
+  border: 1px solid #a9c3bd; border-radius: 10px;
+  background: #f8fbfa; color: var(--ink);
+}
+input[type=number] { direction: ltr; text-align: right; }
+input:disabled { background: #e9efed; color: #425c57; }
+.btn-group, .view-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.btn-group { margin: 14px 0 20px; }
+.btn-group button, .view-btn {
+  min-height: 46px; padding: 7px 6px; border: 1px solid transparent;
+  border-radius: 10px; font-weight: 700; text-align: center;
+}
+.btn-primary, .view-btn.btn-active { background: var(--accent); color: white; }
+.btn-primary:hover, .view-btn.btn-active:hover { background: var(--accent-hover); }
+.btn-group .btn-secondary { background: var(--wash); color: var(--accent); border-color: var(--line); }
+.btn-secondary:hover, .view-btn:hover { background: #e1efeb; }
+.view-toggle { padding: 5px; margin-bottom: 12px; border-radius: 13px; background: var(--wash); }
+.view-btn { background: transparent; color: var(--ink); }
+.canvas-container {
+  display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; padding: 5px;
+  border-radius: 13px;
+  background: radial-gradient(circle at 50% 24%, #243a50, #101d2f 62%, #0b1626);
+}
+#mainCanvas {
+  max-width: 100%; height: auto !important;
+  display: block; border-radius: 9px; cursor: grab; touch-action: none;
+}
+#mainCanvas:active { cursor: grabbing; }
+.info-text { margin: 10px 0 0; font-size: 0.97rem; color: var(--muted); }
+.results-panel { background: var(--wash); padding: 10px 12px; border-radius: 13px; }
+.result-item {
+  display: flex; justify-content: space-between; align-items: baseline;
+  flex-wrap: wrap; gap: 0 8px; padding: 8px 0;
+}
+.result-item + .result-item { border-top: 1px solid #cddfda; }
+.result-label { font-size: 1rem; font-weight: 700; }
+.result-value {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 1px 5px;
+  direction: ltr; text-align: left; color: var(--accent);
+  font-size: 1.3rem; font-weight: 700; overflow-wrap: anywhere;
+}
+.unit { font-size: 0.92rem; white-space: nowrap; }
+.formula-text {
+  flex-basis: 100%; direction: ltr; unicode-bidi: plaintext;
+  font-size: 0.95rem; font-weight: 400; color: var(--muted);
+}
+#dimensions { font-size: 0.98rem; direction: ltr; unicode-bidi: plaintext; }
+@media (max-width: 740px) {
+  .two-columns { grid-template-columns: minmax(0, 1fr); grid-template-areas: "drawing" "controls"; }
+}
 
-<h1>به آزمایشگاه تعاملی ریاضیات خوش آمدید</h1>
 
-<div class="subtitle">
-آزمایشگاه حجم و مساحت
-</div>
-
-<div class="author">
-طراح مهسا صالحی
-</div>
-
-<p style="margin-bottom:15px">
-شکل مورد بررسی را انتخاب کنید
-</p>
-
-<select id="shape">
-
-<option value="">-- انتخاب شکل --</option>
-
-<option value="pyramid">هرم منتظم</option>
-<option value="prism">منشور منتظم</option>
-<option value="cube">مکعب مستطیل</option>
-<option value="cylinder">استوانه</option>
-<option value="cone">مخروط</option>
-
-</select>
-
-<button class="startBtn" onclick="startLab()">
-شروع بررسی
-</button>
-
-</div>
-
-<button class="back" id="backBtn" onclick="goBack()">بازگشت</button>
-
-<iframe id="viewer"></iframe>
-
-<!-- کد فایل ها -->
-
+.canvas-container {
+  background-color: #10253a;
+  background-image: radial-gradient(circle at center, #18395288, transparent 75%),
+    linear-gradient(#a1bcd214 1px, transparent 1px),
+    linear-gradient(90deg, #a1bcd214 1px, transparent 1px);
+  background-size: auto, 24px 24px, 24px 24px;
+}
+.display-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 9px 14px; margin-top: 12px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; list-style: none; padding: 0; margin: 0; font-size: 0.92rem; color: var(--muted); }
+.legend li { display: inline-flex; gap: 6px; align-items: center; }
+.legend li[hidden] { display: none; }
+.swatch { display: inline-block; width: 15px; height: 15px; border: 1px solid #163247; border-radius: 4px; }
+.swatch.base { background: #f4bc69; }
+.swatch.side { background: #66c6e9; }
+.swatch.box-side { background: linear-gradient(90deg, #66c6e9 50%, #83d0b4 50%); }
+.swatch.fold { width: 19px; height: 0; border: 0; border-top: 2px dashed var(--ink); border-radius: 0; }
+.reset-view { margin-inline-start: auto; min-height: 44px; border: 1px solid var(--line); border-radius: 10px; padding: 6px 12px; color: var(--accent); background: var(--wash); font-weight: 700; }
+.reset-view:hover { background: #e1efeb; }
+</script>
 <template id="pyramid">
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>هرم منتظم & چهاروجهی</title>
-    <style>
-
-html,body{direction:rtl;unicode-bidi:embed;}
-input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;text-align:right;}
-.result-item{gap:10px;}
-.result-value{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;direction:ltr;text-align:left;}
-#dimensions{direction:rtl;text-align:right;display:inline-block;}
-.unit{white-space:nowrap;}
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; background:linear-gradient(135deg,#0f172a 0%,#172554 35%,#134e4a 100%); min-height:100vh; padding:10px; overflow-x:hidden; }
-        .container { max-width: 1300px; margin: 0 auto; width: 100%; }
-        h1 { text-align: center; color: white; margin-bottom: 15px; font-size: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-        .main-card { background:rgba(255,255,255,0.10); backdrop-filter:blur(20px); border-radius:24px; padding:12px; border:1px solid rgba(255,255,255,0.12); box-shadow:0 20px 60px rgba(0,0,0,.35); }
-        .two-columns { display: grid; grid-template-columns: 1fr 1.2fr; gap: 15px; }
-        .input-panel { background:rgba(255,255,255,.05); border-radius:20px; padding:14px; border:1px solid rgba(255,255,255,.08);}
-        .input-group { margin-bottom: 12px; }
-        label { display: block; color: white; margin-bottom: 5px; font-weight: 600; font-size: 12px; }
-        input, select { width: 100%; padding: 8px 12px; border: none; border-radius: 10px; font-size: 14px; background: rgba(255, 255, 255, 0.95); }
-        input:focus, select:focus { outline: none; background: white; box-shadow: 0 0 0 3px rgba(255, 217, 102, 0.5); }
-        .btn-group { display: flex; gap: 8px; margin: 12px 0 10px; }
-        button { flex: 1; padding: 6px 8px; border: none; border-radius: 25px; font-size: 12px; font-weight: bold; cursor: pointer; transition: transform 0.1s; }
-        button:active { transform: scale(0.97); }
-        .btn-primary { background: linear-gradient(135deg, #ffb347, #ff8c1a); color: white; }
-        .btn-secondary { background: #2c5a4a; color: white; }
-        .btn-active { background: linear-gradient(135deg, #28a745, #20c997); color: white; }
-        .view-toggle { display: flex; gap: 8px; margin-bottom: 10px; }
-        .view-btn { flex: 1; padding: 6px; background: rgba(0, 0, 0, 0.5); color: white; border: 1px solid rgba(255,255,255,0.3); font-size: 11px; cursor: pointer; transition: all 0.2s; }
-        .view-btn:hover { background: rgba(0, 0, 0, 0.7); }
-        .results-panel { background: rgba(0, 0, 0, 0.45); border-radius: 12px; padding: 10px; margin-top: 10px; }
-        .result-item { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); color: white; }
-        .result-item:last-child { border-bottom: none; }
-        .result-label { font-size: 12px; font-weight: 500; }
-        .result-value { font-size: 16px; font-weight: bold; color: #ffd966; text-align: left; direction: ltr; }
-        .formula-text { font-size: 9px; display: block; color: #ffd966aa; font-weight: normal; direction: rtl; text-align: left; }
-        .unit { font-size: 9px; margin-right: 3px; }
-        .drawing-panel { background:rgba(255,255,255,.05); border-radius:20px; padding:10px; border:1px solid rgba(255,255,255,.08);}
-        .canvas-container { background: #1a1a2e; border-radius: 12px; padding: 6px; display: flex; justify-content: center; align-items: center; min-height: 400px; position: relative; }
-        #mainCanvas { background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.05), transparent 45%), linear-gradient(180deg,#18233f 0%,#0f1628 50%,#080c15 100%); border-radius: 16px; display: block; margin: 0 auto; width: 100%; height: auto; cursor: grab; border:1px solid rgba(255,255,255,0.08); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08),0 15px 40px rgba(0,0,0,0.45);}
-        #mainCanvas:active { cursor: grabbing; }
-        .info-text { color: rgba(255, 255, 255, 0.7); text-align: center; margin-top: 8px; font-size: 9px; }
-        .badge { background: rgba(255, 217, 102, 0.2); padding: 2px 6px; border-radius: 15px; font-size: 9px; display: inline-block; }
-        @media (max-width: 768px) { .two-columns { grid-template-columns: 1fr; gap: 12px; } body { padding: 6px; } h1 { font-size: 18px; } .canvas-container { min-height: 360px; } }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🔺هرم منتظم & چهاروجهی</h1>
+<div class="container">
+        <h1>هرم منتظم</h1>
         <div class="main-card">
             <div class="two-columns">
-                <div class="input-panel">
+                <div class="drawing-panel">
+                    <div class="view-toggle"><button id="showNetBtn" aria-pressed="true" class="view-btn btn-active">گسترده</button><button id="show3DBtn" aria-pressed="false" class="view-btn">نمای سه‌بعدی</button></div>
+                    <div class="canvas-container"><canvas id="mainCanvas" tabindex="0" role="img" aria-label="نمای هندسی شکل" aria-describedby="viewLabel" width="600" height="480"></canvas></div>
+                    
+                    <div class="display-tools">
+                        <ul class="legend" aria-label="راهنمای رنگ‌ها و خطوط">
+                            <li><span class="swatch base" aria-hidden="true"></span>قاعده</li>
+                            <li><span class="swatch side" aria-hidden="true"></span>سطح جانبی</li>
+                            <li id="foldKey"><span class="swatch fold" aria-hidden="true"></span>خط تا</li>
+                        </ul>
+                        <button type="button" class="reset-view" id="resetView">بازنشانی نما</button>
+                    </div>
+                    <p class="info-text" id="viewLabel">قاعده در مرکز و مثلث‌ها در اطراف آن قرار دارند.</p>
+                </div>
+                <div class="input-panel"><h2>ابعاد شکل</h2>
                     <div class="input-group">
-                        <label>🔷 نوع هرم</label>
+                        <label for="sidesCount">نوع هرم</label>
                         <select id="sidesCount">
                             <option value="3">3 - هرم سه‌ضلعی (قاعده مثلث)</option>
                             <option value="tetra" selected>⚡ ۴ وجه منتظم (چهاروجهی - همه مثلث متساوی‌الاضلاع)</option>
@@ -267,26 +285,21 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
                             <option value="8">8 - هرم هشت‌ضلعی</option>
                         </select>
                     </div>
-                    <div class="input-group"><label>📏 طول ضلع قاعده (a)</label><input type="number" id="sideLength" value="6" step="any"></div>
-                    <div class="input-group"><label>📏 ارتفاع هرم (h)</label><input type="number" id="height" value="8" step="any"></div>
-                    <div class="btn-group"><button id="updateBtn" class="btn-primary">✨ بروزرسانی</button><button id="resetBtn" class="btn-secondary">🔄 بازنشانی</button></div>
-                    <div class="results-panel">
-                        <div class="result-item"><span class="result-label">🧮 مساحت کل</span><span class="result-value"><span id="totalArea">0</span><span class="unit">cm²</span><span class="formula-text">(مساحت قاعده + مساحت جانبی)</span></span></div>
-                        <div class="result-item"><span class="result-label">📐 مساحت جانبی</span><span class="result-value"><span id="lateralArea">0</span><span class="unit">cm²</span><span class="formula-text">(n × ½ × a × ارتفاع مثلث جانبی)</span></span></div>
-                        <div class="result-item"><span class="result-label">💧 حجم</span><span class="result-value"><span id="volume">0</span><span class="unit">cm³</span><span class="formula-text">(⅓ × مساحت قاعده × h)</span></span></div>
-                        <div class="result-item"><span class="result-label">🔍 مشخصات</span><span class="result-value" style="font-size: 13px;"><span id="dimensions"></span></span></div>
+                    <div class="input-group"><label for="sideLength">طول ضلع قاعده (a)</label><input type="number" id="sideLength" value="6" step="any"></div>
+                    <div class="input-group"><label for="height">ارتفاع هرم (h)</label><input type="number" id="height" value="8" step="any"></div>
+                    <div class="btn-group"><button id="updateBtn" class="btn-primary">محاسبه</button><button id="resetBtn" class="btn-secondary">بازنشانی</button></div>
+                    <div class="results-panel" aria-live="polite"><h2>نتایج محاسبه</h2>
+                        <div class="result-item"><span class="result-label">مساحت کل</span><span class="result-value"><span id="totalArea">0</span><span class="unit">cm²</span></span><span class="formula-text">(مساحت قاعده + مساحت جانبی)</span></div>
+                        <div class="result-item"><span class="result-label">مساحت جانبی</span><span class="result-value"><span id="lateralArea">0</span><span class="unit">cm²</span></span><span class="formula-text">(n × ½ × a × ارتفاع مثلث جانبی)</span></div>
+                        <div class="result-item"><span class="result-label">حجم</span><span class="result-value"><span id="volume">0</span><span class="unit">cm³</span></span><span class="formula-text">(⅓ × مساحت قاعده × h)</span></div>
+                        <div class="result-item"><span class="result-label">مشخصات</span><span class="result-value"><span id="dimensions"></span></span></div>
                     </div>
-                    <div class="info-text">⚡ چهاروجهی منتظم: ارتفاع خودکار محاسبه می‌شود     </div>
-                </div>
-                <div class="drawing-panel">
-                    <div class="view-toggle"><button id="showNetBtn" class="view-btn btn-active">🧩 گسترده (Net)</button><button id="show3DBtn" class="view-btn">📦 نمای ۳ بعدی</button></div>
-                    <div class="canvas-container"><canvas id="mainCanvas" width="600" height="480"></canvas></div>
-                    <div class="info-text"><span class="badge" id="viewLabel">هرم منتظم | وجه‌های جانبی مثلث متساوی‌الساقین</span><span class="badge" style="margin-right:5px;">✨ چهاروجهی: همه مثلث متساوی‌الاضلاع</span></div>
+                    <p class="info-text">در چهاروجهی منتظم، ارتفاع به‌صورت خودکار محاسبه می‌شود.</p>
                 </div>
             </div>
         </div>
     </div>
-    <script>
+<script>
         (function() {
             // عناصر DOM
             const sidesSelect = document.getElementById('sidesCount');
@@ -311,7 +324,7 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             
             // متغیرهای چرخش سه بعدی با ماوس
             let rotationY = -0.65;   // چرخش حول محور Y
-            let rotationX = 0.35;    // چرخش حول محور X
+            let rotationX = -0.38;    // چرخش حول محور X
             let isDragging3D = false;
             let lastDragX3D = 0, lastDragY3D = 0;
             
@@ -381,123 +394,6 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
                 return { n, a, h, L, R, isTetra, areaBase, slantHeight };
             }
             
-            function getCircumradius(a, n) {
-                return a / (2 * Math.sin(Math.PI / n));
-            }
-            
-            // رسم چندضلعی منتظم برای گسترده
-            function drawRegularPolygon(ctx, cx, cy, n, R, rotationRad, fillColor, strokeColor) {
-                if (n < 3) return;
-                const vertices = [];
-                for (let i = 0; i < n; i++) {
-                    let angle = rotationRad + i * 2 * Math.PI / n;
-                    let x = cx + R * Math.cos(angle);
-                    let y = cy + R * Math.sin(angle);
-                    vertices.push({ x, y });
-                }
-                ctx.beginPath();
-                ctx.moveTo(vertices[0].x, vertices[0].y);
-                for (let i = 1; i < n; i++) ctx.lineTo(vertices[i].x, vertices[i].y);
-                ctx.closePath();
-                ctx.fillStyle = fillColor;
-                ctx.fill();
-                ctx.strokeStyle = strokeColor;
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                return vertices;
-            }
-            
-            function getRotationAngle(n) {
-                const baseAngle = -Math.PI / 2 + Math.PI / n;
-                const extra = (n % 2 === 0) ? 0 : Math.PI;
-                return baseAngle + extra;
-            }
-            
-            // ========================== نمای گسترده (Net) ==========================
-            function drawNet() {
-                let { n, a, h, L, R, isTetra } = getValues();
-                const width = canvas.width, height = canvas.height;
-                ctx.clearRect(0, 0, width, height);
-                
-                // سایه ملایم
-                ctx.beginPath();
-                ctx.ellipse(width/2, height*0.72, width*0.15, height*0.045, 0, 0, Math.PI*2);
-                const shadow = ctx.createRadialGradient(width/2, height*0.72, 5, width/2, height*0.72, width*0.15);
-                shadow.addColorStop(0, "rgba(0,0,0,.35)");
-                shadow.addColorStop(1, "rgba(0,0,0,0)");
-                ctx.fillStyle = shadow;
-                ctx.fill();
-                
-                const slantHeight = getSlantHeight(L, a);
-                const R_base = getCircumradius(a, n);
-                const baseDiameter = 2 * R_base;
-                const totalApproxHeight = slantHeight * 2 + baseDiameter * 0.6;
-                const totalApproxWidth = Math.max(a * n, baseDiameter * 1.5);
-                const marginPercent = 0.12;
-                const availableWidth = width * (1 - marginPercent * 2);
-                const availableHeight = height * (1 - marginPercent * 2);
-                
-                let scale = Math.min(availableWidth / totalApproxWidth, availableHeight / totalApproxHeight);
-                scale = Math.min(scale, 7);
-                scale = Math.max(scale, 1.2);
-                
-                const centerX = width / 2 + netOffsetX;
-                const centerY = height / 2 + netOffsetY;
-                
-                const baseColor = "rgba(255, 160, 80, 0.92)";
-                const lateralColor = "rgba(74, 144, 226, 0.88)";
-                const strokeLight = "#ffdd99";
-                const rotation = getRotationAngle(n);
-                const R_scaled = R_base * scale;
-                const triangleHeightScaled = slantHeight * scale;
-                
-                const baseVertices = [];
-                for (let i = 0; i < n; i++) {
-                    let angle = rotation + i * 2 * Math.PI / n;
-                    let x = centerX + R_scaled * Math.cos(angle);
-                    let y = centerY + R_scaled * Math.sin(angle);
-                    baseVertices.push({ x, y });
-                }
-                
-                // رسم قاعده
-                ctx.beginPath();
-                ctx.moveTo(baseVertices[0].x, baseVertices[0].y);
-                for (let i = 1; i < n; i++) ctx.lineTo(baseVertices[i].x, baseVertices[i].y);
-                ctx.closePath();
-                ctx.fillStyle = baseColor;
-                ctx.fill();
-                ctx.strokeStyle = strokeLight;
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                
-                // رسم مثلث‌های جانبی
-                for (let i = 0; i < n; i++) {
-                    const p1 = baseVertices[i];
-                    const p2 = baseVertices[(i + 1) % n];
-                    const midX = (p1.x + p2.x) / 2;
-                    const midY = (p1.y + p2.y) / 2;
-                    const outDirX = midX - centerX;
-                    const outDirY = midY - centerY;
-                    const outLen = Math.sqrt(outDirX * outDirX + outDirY * outDirY);
-                    const normOutX = outDirX / outLen;
-                    const normOutY = outDirY / outLen;
-                    const apexX = midX + normOutX * triangleHeightScaled;
-                    const apexY = midY + normOutY * triangleHeightScaled;
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(p1.x, p1.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.lineTo(apexX, apexY);
-                    ctx.closePath();
-                    ctx.fillStyle = lateralColor;
-                    ctx.fill();
-                    ctx.strokeStyle = strokeLight;
-                    ctx.lineWidth = 1.5;
-                    ctx.stroke();
-                }
-            }
-            
-            // توابع سه بعدی
             function rotatePoint3D(x, y, z) {
                 const cosY = Math.cos(rotationY), sinY = Math.sin(rotationY);
                 const cosX = Math.cos(rotationX), sinX = Math.sin(rotationX);
@@ -507,189 +403,16 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
                 let z2 = y * sinX + z1 * cosX;
                 return { x: x1, y: y2, z: z2 };
             }
-            
-            function projectPerspective(x, y, z, cx, cy, perspective = 1100) {
-                const scale = perspective / (perspective + z);
-                return { x: cx + x * scale, y: cy + y * scale, scale: scale };
+
+            function drawNet() {
+                geometryDisplay.drawNet(ctx, canvas.width, canvas.height, 'pyramid', getValues(),
+                    { x: netOffsetX, y: netOffsetY });
             }
-            
-            function drawFace3D(points, fillStyle, strokeStyle, lineWidth = 1.5) {
-                if (points.length < 3) return;
-                ctx.beginPath();
-                ctx.moveTo(points[0].x, points[0].y);
-                for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
-                ctx.closePath();
-                ctx.fillStyle = fillStyle;
-                ctx.fill();
-                ctx.lineWidth = lineWidth;
-                ctx.strokeStyle = strokeStyle;
-                ctx.stroke();
-            }
-            
-            // ========================== نمای ۳ بعدی با قاعده نارنجی پررنگ ==========================
+
             function draw3D() {
-                let { n, a, h, L, R, isTetra } = getValues();
-                const width = canvas.width, height = canvas.height;
-                if (width <= 0 || height <= 0 || n < 3 || a <= 0 || h <= 0) return;
-                
-                const bg = ctx.createLinearGradient(0, 0, width, height);
-                bg.addColorStop(0, '#12192f');
-                bg.addColorStop(1, '#070b16');
-                ctx.fillStyle = bg;
-                ctx.fillRect(0, 0, width, height);
-                
-                const cx = width / 2;
-                const cy = height / 2 + 20;
-                
-                const shadowGrad = ctx.createRadialGradient(cx, height - 55, 0, cx, height - 55, 130);
-                shadowGrad.addColorStop(0, 'rgba(0,0,0,0.45)');
-                shadowGrad.addColorStop(0.45, 'rgba(0,0,0,0.20)');
-                shadowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.fillStyle = shadowGrad;
-                ctx.beginPath();
-                ctx.ellipse(cx, height - 55, 130, 18, 0, 0, Math.PI * 2);
-                ctx.fill();
-                
-                const maxDim = Math.max(2 * R, h);
-                let scale = Math.min(width, height) / (maxDim * 1.8);
-                scale = Math.min(scale, 7);
-                scale = Math.max(scale, 0.8);
-                
-                const rotAngle = getRotationAngle(n);
-                const baseVertices3D = [];
-                for (let i = 0; i < n; i++) {
-                    const angle = rotAngle + i * 2 * Math.PI / n;
-                    const x = R * Math.cos(angle) * scale;
-                    const z = R * Math.sin(angle) * scale;
-                    baseVertices3D.push({ x: x, y: 0, z: z });
-                }
-                const apex3D = { x: 0, y: -h * scale, z: 0 };
-                
-                const rotatedBase = baseVertices3D.map(p => rotatePoint3D(p.x, p.y, p.z));
-                const rotatedApex = rotatePoint3D(apex3D.x, apex3D.y, apex3D.z);
-                
-                // پروجکشن موقت برای محاسبه bounding box
-                const tempProjectedBase = rotatedBase.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, 700));
-                const tempProjectedApex = projectPerspective(rotatedApex.x, rotatedApex.y, rotatedApex.z, 0, 0, 700);
-                let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-                const allTempPoints = [...tempProjectedBase, tempProjectedApex];
-                for (const p of allTempPoints) {
-                    minX = Math.min(minX, p.x);
-                    maxX = Math.max(maxX, p.x);
-                    minY = Math.min(minY, p.y);
-                    maxY = Math.max(maxY, p.y);
-                }
-                const projectedWidth = maxX - minX;
-                const projectedHeight = maxY - minY;
-                let fitScale = 1;
-                const targetMargin = 0.78;
-                if (projectedWidth > 0 && projectedHeight > 0) {
-                    fitScale = Math.min((width * targetMargin) / projectedWidth, (height * targetMargin) / projectedHeight);
-                }
-                
-                const finalRotatedBase = rotatedBase.map(p => ({ x: p.x * fitScale, y: p.y * fitScale, z: p.z }));
-                const finalRotatedApex = { x: rotatedApex.x * fitScale, y: rotatedApex.y * fitScale, z: rotatedApex.z };
-                
-                const finalTempBase = finalRotatedBase.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, 700));
-                const finalTempApex = projectPerspective(finalRotatedApex.x, finalRotatedApex.y, finalRotatedApex.z, 0, 0, 700);
-                let finalMinX = Infinity, finalMaxX = -Infinity, finalMinY = Infinity, finalMaxY = -Infinity;
-                const allFinalTemp = [...finalTempBase, finalTempApex];
-                for (const p of allFinalTemp) {
-                    finalMinX = Math.min(finalMinX, p.x);
-                    finalMaxX = Math.max(finalMaxX, p.x);
-                    finalMinY = Math.min(finalMinY, p.y);
-                    finalMaxY = Math.max(finalMaxY, p.y);
-                }
-                const centerOffsetX = (width - (finalMinX + finalMaxX)) / 2;
-                const verticalShift = 10;
-                const centerOffsetY = (height - (finalMinY + finalMaxY)) / 2;
-                
-                const projectedBase = finalRotatedBase.map(p => projectPerspective(p.x, p.y, p.z, centerOffsetX, centerOffsetY + verticalShift, 700));
-                const projectedApex = projectPerspective(finalRotatedApex.x, finalRotatedApex.y, finalRotatedApex.z, centerOffsetX, centerOffsetY + verticalShift, 700);
-                
-                const faces = [];
-                for (let i = 0; i < n; i++) {
-                    const p1 = projectedBase[i];
-                    const p2 = projectedBase[(i + 1) % n];
-                    const avgDepth = (finalRotatedBase[i].z + finalRotatedBase[(i + 1) % n].z + finalRotatedApex.z) / 3;
-                    faces.push({
-                        type: 'lateral',
-                        points: [p1, p2, projectedApex],
-                        depth: avgDepth,
-                        index: i
-                    });
-                }
-                const baseDepth = finalRotatedBase.reduce((sum, p) => sum + p.z, 0) / n;
-                faces.push({
-                    type: 'base',
-                    points: projectedBase,
-                    depth: baseDepth
-                });
-                
-                faces.sort((a, b) => a.depth - b.depth);
-                
-                // رسم وجوه به ترتیب عمق
-                faces.forEach((face, idx) => {
-                    if (face.type === 'lateral') {
-                        const grad = ctx.createLinearGradient(
-                            face.points[0].x, face.points[0].y,
-                            face.points[2].x, face.points[2].y
-                        );
-                        const c1 = idx % 2 === 0 ? '#ff2a7f' : '#6a33ff';
-                        const c2 = idx % 2 === 0 ? '#4d3cff' : '#1d2fff';
-                        grad.addColorStop(0, c1);
-                        grad.addColorStop(0.55, c2);
-                        grad.addColorStop(1, '#101a55');
-                        drawFace3D(face.points, grad, 'rgba(255,255,255,0.16)', 1.2);
-                    } else {
-                        // ✅ قاعده با رنگ نارنجی پررنگ و شفافیت اندک برای درخشش بیشتر
-                        const orangeGrad = ctx.createLinearGradient(
-                            projectedBase[0]?.x || 0, projectedBase[0]?.y || 0,
-                            projectedBase[Math.floor(n/2)]?.x || 0, projectedBase[Math.floor(n/2)]?.y || 0
-                        );
-                        orangeGrad.addColorStop(0, '#ff9a3c');
-                        orangeGrad.addColorStop(0.6, '#ff6a0f');
-                        orangeGrad.addColorStop(1, '#e05a00');
-                        drawFace3D(face.points, orangeGrad, 'rgba(255,180,60,0.7)', 1.6);
-                    }
-                });
-                
-                // لبه‌های قاعده با رنگ طلایی برای برجستگی بیشتر
-                ctx.beginPath();
-                ctx.moveTo(projectedBase[0].x, projectedBase[0].y);
-                for (let i = 1; i < n; i++) ctx.lineTo(projectedBase[i].x, projectedBase[i].y);
-                ctx.closePath();
-                ctx.lineWidth = 2.2;
-                ctx.strokeStyle = '#ffb347';
-                ctx.stroke();
-                
-                // لبه‌های جانبی
-                ctx.beginPath();
-                for (let i = 0; i < n; i++) {
-                    ctx.moveTo(projectedBase[i].x, projectedBase[i].y);
-                    ctx.lineTo(projectedApex.x, projectedApex.y);
-                    ctx.stroke();
-                }
-                ctx.lineWidth = 1.5;
-                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-                for (let i = 0; i < n; i++) {
-                    ctx.beginPath();
-                    ctx.moveTo(projectedBase[i].x, projectedBase[i].y);
-                    ctx.lineTo(projectedApex.x, projectedApex.y);
-                    ctx.stroke();
-                }
-                
-                // افکت درخشش روی راس
-                const glow = ctx.createRadialGradient(projectedApex.x, projectedApex.y, 0, projectedApex.x, projectedApex.y, 40);
-                glow.addColorStop(0, 'rgba(255,255,255,0.55)');
-                glow.addColorStop(0.4, 'rgba(255,255,255,0.18)');
-                glow.addColorStop(1, 'rgba(255,255,255,0)');
-                ctx.fillStyle = glow;
-                ctx.beginPath();
-                ctx.arc(projectedApex.x, projectedApex.y, 40, 0, Math.PI * 2);
-                ctx.fill();
+                geometryDisplay.drawSolid(ctx, canvas.width, canvas.height, 'pyramid', getValues(), rotatePoint3D);
             }
-            
+
             function autoUpdateForTetra() {
                 let type = sidesSelect.value;
                 let a = parseFloat(sideInput.value);
@@ -709,7 +432,7 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             function setupCanvas() {
                 const container = canvas.parentElement;
                 if (!container) return;
-                const containerWidth = container.clientWidth - 12;
+                const containerWidth = container.clientWidth - 10;
                 canvas.width = Math.min(containerWidth, 700);
                 canvas.height = canvas.width * 0.72;
                 canvas.style.width = `${canvas.width}px`;
@@ -719,10 +442,13 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             
             function setView(view) {
                 currentView = view;
+                showNetBtn.setAttribute('aria-pressed', String(view === 'net'));
+                document.getElementById('foldKey').hidden = view === '3d';
+                show3DBtn.setAttribute('aria-pressed', String(view === '3d'));
                 if (view === 'net') {
                     showNetBtn.classList.add('btn-active');
                     show3DBtn.classList.remove('btn-active');
-                    viewLabel.innerText = 'گسترده | قاعده در مرکز | مثلث‌های جانبی متصل به اضلاع';
+                    viewLabel.innerText = 'قاعده در مرکز و مثلث‌ها در اطراف آن قرار دارند.';
                     netOffsetX = 0;
                     netOffsetY = 0;
                     canvas.style.cursor = 'grab';
@@ -730,7 +456,7 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
                 } else {
                     show3DBtn.classList.add('btn-active');
                     showNetBtn.classList.remove('btn-active');
-                    viewLabel.innerText = 'نمای سه بعدی | قاعده نارنجی | چرخش با ماوس/لمس';
+                    viewLabel.innerText = 'برای چرخاندن شکل، تصویر را بکشید یا از کلیدهای جهت‌دار استفاده کنید.';
                     canvas.style.cursor = 'grab';
                     refresh();
                 }
@@ -828,330 +554,64 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
                 netOffsetX = 0;
                 netOffsetY = 0;
                 rotationY = -0.65;
-                rotationX = 0.35;
+                rotationX = -0.38;
                 refresh();
             });
             showNetBtn.addEventListener('click', () => setView('net'));
             show3DBtn.addEventListener('click', () => setView('3d'));
             
+
+        const resetView = document.getElementById('resetView');
+        resetView.addEventListener('click', () => {
+            netOffsetX = netOffsetY = 0;
+            rotationX = -0.38;
+            rotationY = -0.65;
+            refresh();
+        });
+        canvas.addEventListener('keydown', event => {
+            const steps = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]};
+            const step = steps[event.key];
+            if (!step) return;
+            event.preventDefault();
+            const [x, y] = step;
+            if (currentView === '3d') {
+                rotationY += x * 0.14;
+                rotationX = Math.max(-1.5, Math.min(1.5, rotationX + y * 0.14));
+            } else {
+                netOffsetX = Math.max(-canvas.width * 0.3, Math.min(canvas.width * 0.3, netOffsetX + x * 12));
+                netOffsetY = Math.max(-canvas.height * 0.3, Math.min(canvas.height * 0.3, netOffsetY + y * 12));
+            }
+            refresh();
+        });
+
             window.addEventListener('resize', () => setTimeout(setupCanvas, 100));
             setupCanvas();
             setView('3d');  // پیش‌نمایش سه بعدی با قاعده نارنجی
         })();
     </script>
-</body>
-</html>
 </template>
-
 <template id="prism">
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>منشور منتظم | گسترده + سه‌بعدی متعامد (بدون پرسپکتیو)</title>
-    <style>
-
-html,body{direction:rtl;unicode-bidi:embed;}
-input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;text-align:right;}
-.result-item{gap:10px;}
-.result-value{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;direction:ltr;text-align:left;}
-#dimensions{direction:rtl;text-align:right;display:inline-block;}
-.unit{white-space:nowrap;}
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0f172a 0%, #172554 35%, #134e4a 100%);
-            min-height: 100vh;
-            min-height: 100dvh;
-            background-attachment: fixed;
-            overflow-x: hidden;
-            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
-            padding: 20px 16px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 1.65rem;
-            font-weight: 600;
-            letter-spacing: -0.3px;
-            background: linear-gradient(135deg, #FFF9E6, #FFE5B4);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            margin-bottom: 20px;
-            backdrop-filter: blur(2px);
-        }
-
-        .main-card {
-            background: rgba(255,255,255,0.10);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-            padding: 1.2rem;
-            transition: all 0.3s ease;
-        }
-
-        .two-columns {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 1.5rem;
-        }
-
-        .input-panel {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            padding: 1.2rem;
-            backdrop-filter: blur(4px);
-        }
-
-        .drawing-panel {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            padding: 0.8rem;
-        }
-
-        .input-group {
-            margin-bottom: 1rem;
-        }
-
-        label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #f0ede8;
-            font-weight: 600;
-            font-size: 0.8rem;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px 14px;
-            border: none;
-            border-radius: 1.2rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            background: rgba(255, 255, 255, 0.92);
-            transition: all 0.2s;
-            color: #111;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(255, 200, 100, 0.5);
-            transform: scale(1.01);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin: 1rem 0 0.8rem;
-        }
-
-        button {
-            flex: 1;
-            padding: 8px 6px;
-            border: none;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.25s ease;
-            position: relative;
-            overflow: hidden;
-            background: #2c3e2f;
-            color: white;
-            letter-spacing: 0.3px;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.05);
-        }
-
-        button:active {
-            transform: translateY(1px);
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -120%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-            transition: 0.5s;
-        }
-
-        button:hover::before {
-            left: 120%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(105deg, #ff9a3c, #ff6a1a);
-            box-shadow: 0 4px 12px rgba(255, 100, 0, 0.3);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(105deg, #2a5f4f, #1d3e33);
-        }
-
-        .btn-active {
-            background: linear-gradient(135deg, #28a745, #1f9c55);
-            box-shadow: 0 2px 8px rgba(0,255,100,0.2);
-            border: 1px solid rgba(255,255,180,0.5);
-        }
-
-        .results-panel {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 1.2rem;
-            padding: 0.9rem;
-            margin-top: 0.8rem;
-            backdrop-filter: blur(5px);
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            color: #f5f0e6;
-        }
-
-        .result-label {
-            font-size: 0.75rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .result-value {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #ffdf99;
-            text-align: left;
-            direction: ltr;
-        }
-
-        .formula-text {
-            font-size: 0.7rem;
-            color: #ffdd99aa;
-            margin-right: 8px;
-        }
-
-        .view-toggle {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .view-btn {
-            flex: 1;
-            padding: 8px;
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 2rem;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border: 1px solid rgba(255,255,200,0.3);
-            transition: all 0.2s;
-        }
-
-        .canvas-container {
-            background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.25));
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.08);
-            overflow: hidden;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 12px 35px rgba(0,0,0,0.35);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 420px;
-            position: relative;
-        }
-
-        #mainCanvas {
-            background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.05), transparent 45%), linear-gradient(180deg, #18233f 0%, #0f1628 50%, #080c15 100%);
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 15px 40px rgba(0,0,0,0.45);
-            display: block;
-            margin: 0 auto;
-            width: 100%;
-            height: auto;
-            cursor: grab;
-            transition: all 0.2s;
-        }
-
-        #mainCanvas:active {
-            cursor: grabbing;
-        }
-
-        .info-text {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .badge {
-            background: rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(8px);
-            padding: 4px 12px;
-            border-radius: 60px;
-            font-size: 0.7rem;
-            color: #ffefc0;
-            border: 1px solid rgba(255,215,120,0.4);
-            letter-spacing: 0.3px;
-        }
-
-        @media (max-width: 780px) {
-            .two-columns {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            body {
-                padding: 12px;
-            }
-            h1 {
-                font-size: 1.3rem;
-            }
-            .canvas-container {
-                min-height: 350px;
-            }
-        }
-    </style>
-</head>
-<body>
 <div class="container">
-    <h1>🔷 منشور منتظم | گسترده + سه‌بعدی متعامد (بدون پرسپکتیو)</h1>
+    <h1>منشور منتظم</h1>
     <div class="main-card">
         <div class="two-columns">
-            <div class="input-panel">
+            <div class="drawing-panel">
+                <div class="view-toggle"><button id="showNetBtn" aria-pressed="true" class="view-btn btn-active">گسترده</button><button id="show3DBtn" aria-pressed="false" class="view-btn">نمای سه‌بعدی</button></div>
+                <div class="canvas-container"><canvas id="mainCanvas" tabindex="0" role="img" aria-label="نمای هندسی شکل" aria-describedby="viewLabel" width="620" height="480"></canvas></div>
+                
+                    <div class="display-tools">
+                        <ul class="legend" aria-label="راهنمای رنگ‌ها و خطوط">
+                            <li><span class="swatch base" aria-hidden="true"></span>قاعده</li>
+                            <li><span class="swatch side" aria-hidden="true"></span>سطح جانبی</li>
+                            <li id="foldKey"><span class="swatch fold" aria-hidden="true"></span>خط تا</li>
+                        </ul>
+                        <button type="button" class="reset-view" id="resetView">بازنشانی نما</button>
+                    </div>
+                    <p class="info-text" id="viewLabel">گسترده از دو قاعده و مستطیل‌های جانبی تشکیل شده است.</p>
+            </div>
+            <div class="input-panel"><h2>ابعاد شکل</h2>
                 <div class="input-group">
-                    <label>🔷 تعداد اضلاع قاعده (n)</label>
+                    <label for="sidesCount">تعداد اضلاع قاعده (n)</label>
                     <select id="sidesCount">
                         <option value="3">🔺 3 - مثلث</option>
                         <option value="4">⬛ 4 - مربع</option>
@@ -1161,26 +621,20 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
                         <option value="8">🔘 8 - هشت ضلعی</option>
                     </select>
                 </div>
-                <div class="input-group"><label>📏 اندازه ضلع قاعده (a)</label><input type="number" id="sideLength" value="4" step="any"></div>
-                <div class="input-group"><label>📐 ارتفاع منشور (h)</label><input type="number" id="height" value="5" step="any"></div>
-                <div class="btn-group"><button id="updateBtn" class="btn-primary">✨ محاسبه و رسم</button><button id="resetBtn" class="btn-secondary">🔄 بازنشانی</button></div>
-                <div class="results-panel">
-                    <div class="result-item"><span class="result-label">🧮 مساحت کل</span><span class="result-value"><span id="totalArea">0</span><span class="unit"> cm²</span><span class="formula-text">(۲×مساحت قاعده + جانبی)</span></span></div>
-                    <div class="result-item"><span class="result-label">📐 مساحت جانبی</span><span class="result-value"><span id="lateralArea">0</span><span class="unit"> cm²</span><span class="formula-text">(محیط × ارتفاع)</span></span></div>
-                    <div class="result-item"><span class="result-label">💧 حجم</span><span class="result-value"><span id="volume">0</span><span class="unit"> cm³</span><span class="formula-text">(مساحت قاعده × ارتفاع)</span></span></div>
-                    <div class="result-item"><span class="result-label">🔍 ابعاد فعلی</span><span class="result-value" style="font-size: 0.85rem;"><span id="dimensions">n=6, a=4.00, h=5.00</span></span></div>
+                <div class="input-group"><label for="sideLength">اندازه ضلع قاعده (a)</label><input type="number" id="sideLength" value="4" step="any"></div>
+                <div class="input-group"><label for="height">ارتفاع منشور (h)</label><input type="number" id="height" value="5" step="any"></div>
+                <div class="btn-group"><button id="updateBtn" class="btn-primary">محاسبه</button><button id="resetBtn" class="btn-secondary">بازنشانی</button></div>
+                <div class="results-panel" aria-live="polite"><h2>نتایج محاسبه</h2>
+                    <div class="result-item"><span class="result-label">مساحت کل</span><span class="result-value"><span id="totalArea">0</span><span class="unit"> cm²</span></span><span class="formula-text">(۲×مساحت قاعده + جانبی)</span></div>
+                    <div class="result-item"><span class="result-label">مساحت جانبی</span><span class="result-value"><span id="lateralArea">0</span><span class="unit"> cm²</span></span><span class="formula-text">(محیط × ارتفاع)</span></div>
+                    <div class="result-item"><span class="result-label">حجم</span><span class="result-value"><span id="volume">0</span><span class="unit"> cm³</span></span><span class="formula-text">(مساحت قاعده × ارتفاع)</span></div>
+                    <div class="result-item"><span class="result-label">ابعاد فعلی</span><span class="result-value"><span id="dimensions">n=6, a=4.00, h=5.00</span></span></div>
                 </div>
-                <div class="info-text">⚡ اعداد دلخواه (حتی 0.1 تا 2000) - تطبیق هوشمند با کانواس</div>
-            </div>
-            <div class="drawing-panel">
-                <div class="view-toggle"><button id="showNetBtn" class="view-btn btn-active">🧩 گسترده (Net) قابل حرکت</button><button id="show3DBtn" class="view-btn">📦 نمای سه‌بعدی متعامد (چرخش با ماوس)</button></div>
-                <div class="canvas-container"><canvas id="mainCanvas" width="620" height="480"></canvas></div>
-                <div class="info-text"><span class="badge" id="viewLabel">✨ نمای گسترده | مقیاس هوشمند + درگ</span><span class="badge">🖱️ چرخش سه‌بعدی فعال</span><span class="badge">🔒 ضدخروج تضمینی</span></div>
+                
             </div>
         </div>
     </div>
 </div>
-
 <script>
     (function() {
         const sidesSelect = document.getElementById('sidesCount');
@@ -1204,7 +658,7 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
         let lastDragX = 0, lastDragY = 0;
         
         let rotationY = -0.65;
-        let rotationX = 0.35;
+        let rotationX = -0.38;
         let isDragging3D = false;
         let lastDragX3D = 0, lastDragY3D = 0;
 
@@ -1237,104 +691,6 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             return { n, a, h, areaBase, perimeter };
         }
 
-        function getCircumradius(a, n) {
-            return a / (2 * Math.sin(Math.PI / n));
-        }
-
-        function drawRegularPolygon(ctx, cx, cy, n, R, rotationRad, fillColor, strokeColor, lineW = 2) {
-            if (n < 3) return;
-            const vertices = [];
-            for (let i = 0; i < n; i++) {
-                let angle = rotationRad + i * 2 * Math.PI / n;
-                let x = cx + R * Math.cos(angle);
-                let y = cy + R * Math.sin(angle);
-                vertices.push({ x, y });
-            }
-            ctx.beginPath();
-            ctx.moveTo(vertices[0].x, vertices[0].y);
-            for (let i = 1; i < n; i++) ctx.lineTo(vertices[i].x, vertices[i].y);
-            ctx.closePath();
-            ctx.fillStyle = fillColor;
-            ctx.fill();
-            ctx.strokeStyle = strokeColor;
-            ctx.lineWidth = lineW;
-            ctx.stroke();
-        }
-
-        function getFinalRotation(n) {
-            const baseAngle = -Math.PI / 2 + Math.PI / n;
-            const extra = (n % 2 === 0) ? 0 : Math.PI;
-            return baseAngle + extra;
-        }
-
-        // ======================== گسترده NET (مقیاس‌دهی اصلی بدون تغییر) ========================
-        function drawNet() {
-            let { n, a, h } = getValues();
-            const width = canvas.width, height = canvas.height;
-            ctx.clearRect(0, 0, width, height);
-            if (width <= 0 || height <= 0) return;
-
-            const R_base = getCircumradius(a, n);
-            const apothem = R_base * Math.cos(Math.PI / n);
-            const rectW = a;
-            const rectH = h;
-            const totalRectsWidth = n * rectW;
-            const baseDiameter = 2 * R_base;
-
-            const netPureWidth = totalRectsWidth + baseDiameter * 2;
-            const netPureHeight = rectH + (2 * 2 * apothem);
-            if (netPureWidth <= 0 || netPureHeight <= 0) return;
-
-            // مقیاس‌دهی اصلی - بدون تغییر
-            const marginRatio = 0.04;
-            let scale = Math.min(
-                (width * (1 - marginRatio * 2)) / netPureWidth,
-                (height * (1 - marginRatio * 2)) / netPureHeight
-            );
-            scale = Math.min(scale, 5.5);
-            scale = Math.max(scale, 0.45);
-
-            const L = rectW * scale;
-            const W = rectH * scale;
-            const baseDiaScaled = baseDiameter * scale;
-            const apothemScaled = apothem * scale;
-
-            const totalDrawWidth = totalRectsWidth * scale + baseDiaScaled * 2;
-            const totalDrawHeight = netPureHeight * scale;
-            let startX = (width - totalDrawWidth) / 2 + baseDiaScaled + netOffsetX;
-            let startY = (height - totalDrawHeight) / 2 + netOffsetY;
-
-            const baseColor = "rgba(255, 175, 95, 0.92)";
-            const strokeLight = "#ffe0aa";
-
-            for (let i = 0; i < n; i++) {
-                let x = startX + i * L;
-                let y = startY + (totalDrawHeight - W) / 2;
-                ctx.beginPath();
-                ctx.rect(x, y, L, W);
-                const grad = ctx.createLinearGradient(x, y, x + L, y + W);
-                grad.addColorStop(0, "rgba(90, 190, 240, 0.9)");
-                grad.addColorStop(1, "rgba(45, 125, 185, 0.85)");
-                ctx.fillStyle = grad;
-                ctx.fill();
-                ctx.strokeStyle = strokeLight;
-                ctx.lineWidth = 1.7;
-                ctx.stroke();
-            }
-
-            const firstRectX = startX;
-            const rectAreaY = startY + (totalDrawHeight - W) / 2;
-            const rectCenterX = firstRectX + L / 2;
-            const finalRotation = getFinalRotation(n);
-            const R_scaled = R_base * scale;
-
-            const topPolyCenterY = rectAreaY - apothemScaled;
-            drawRegularPolygon(ctx, rectCenterX, topPolyCenterY, n, R_scaled, finalRotation, baseColor, strokeLight, 1.8);
-            const bottomPolyCenterY = rectAreaY + W + apothemScaled;
-            drawRegularPolygon(ctx, rectCenterX, bottomPolyCenterY, n, R_scaled, -finalRotation, baseColor, strokeLight, 1.8);
-        }
-
-        // ======================== توابع سه بعدی بدون پرسپکتیو (متعامد) ========================
         function rotatePoint3D(x, y, z) {
             const cosY = Math.cos(rotationY), sinY = Math.sin(rotationY);
             const cosX = Math.cos(rotationX), sinX = Math.sin(rotationX);
@@ -1344,186 +700,16 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             let z2 = y * sinX + z1 * cosX;
             return { x: x1, y: y2, z: z2 };
         }
-        
-        function orthoProject(point, cx, cy, scale = 1) {
-            return {
-                x: cx + point.x * scale,
-                y: cy + point.y * scale
-            };
+
+        function drawNet() {
+            geometryDisplay.drawNet(ctx, canvas.width, canvas.height, 'prism', getValues(),
+                { x: netOffsetX, y: netOffsetY });
         }
-        
-        function drawFace3D(points, fillStyle, strokeStyle, lineWidth = 1.2) {
-            if (points.length < 3) return;
-            ctx.beginPath();
-            ctx.moveTo(points[0].x, points[0].y);
-            for (let i = 1; i < points.length; i++) {
-                ctx.lineTo(points[i].x, points[i].y);
-            }
-            ctx.closePath();
-            ctx.fillStyle = fillStyle;
-            ctx.fill();
-            ctx.lineWidth = lineWidth;
-            ctx.strokeStyle = strokeStyle;
-            ctx.stroke();
-        }
-        
-        // ======================== نمای سه‌بعدی متعامد با مقیاس‌دهی اصلی مشابه کد اولیه ========================
+
         function draw3D() {
-            let { n, a, h } = getValues();
-            const width = canvas.width, height = canvas.height;
-            if (width <= 0 || height <= 0 || n < 3) return;
-            
-            ctx.clearRect(0, 0, width, height);
-            
-            // سایه زیر منشور (ظاهری)
-            const cxCenter = width / 2;
-            const shadowGrad = ctx.createRadialGradient(cxCenter, height - 50, 0, cxCenter, height - 50, 140);
-            shadowGrad.addColorStop(0, 'rgba(0,0,0,0.45)');
-            shadowGrad.addColorStop(0.5, 'rgba(0,0,0,0.2)');
-            shadowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-            ctx.fillStyle = shadowGrad;
-            ctx.beginPath();
-            ctx.ellipse(cxCenter, height - 50, width * 0.2, height * 0.07, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            const R = getCircumradius(a, n);
-            const bottomVertices = [];
-            const topVertices = [];
-            for (let i = 0; i < n; i++) {
-                const angle = i * 2 * Math.PI / n;
-                const x = R * Math.cos(angle);
-                const z = R * Math.sin(angle);
-                bottomVertices.push({ x, y: 0, z });
-                topVertices.push({ x, y: h, z });
-            }
-            
-            let rotatedBottom = bottomVertices.map(v => rotatePoint3D(v.x, v.y, v.z));
-            let rotatedTop = topVertices.map(v => rotatePoint3D(v.x, v.y, v.z));
-            
-            // مقیاس‌دهی اولیه بر اساس ابعاد مدل (مشابه کد اصلی اما بدون پرسپکتیو)
-            let allPoints = [...rotatedBottom, ...rotatedTop];
-            let maxX = -Infinity, minX = Infinity, maxY = -Infinity, minY = Infinity;
-            for (let p of allPoints) {
-                if (p.x > maxX) maxX = p.x;
-                if (p.x < minX) minX = p.x;
-                if (p.y > maxY) maxY = p.y;
-                if (p.y < minY) minY = p.y;
-            }
-            const modelWidth = maxX - minX;
-            const modelHeight = maxY - minY;
-            const maxDim = Math.max(modelWidth, modelHeight);
-            
-            let baseScale = Math.min(width, height) / (maxDim * 2.2);
-            baseScale = Math.min(baseScale, 5.8);
-            baseScale = Math.max(baseScale, 0.6);
-            
-            // اعمال مقیاس
-            let scaledBottom = rotatedBottom.map(p => ({ x: p.x * baseScale, y: p.y * baseScale, z: p.z }));
-            let scaledTop = rotatedTop.map(p => ({ x: p.x * baseScale, y: p.y * baseScale, z: p.z }));
-            
-            // محاسبه باندینگ باکس برای فیت نهایی (بدون پرسپکتیو)
-            let allScaled = [...scaledBottom, ...scaledTop];
-            let minSX = Infinity, maxSX = -Infinity, minSY = Infinity, maxSY = -Infinity;
-            for (let p of allScaled) {
-                if (p.x < minSX) minSX = p.x;
-                if (p.x > maxSX) maxSX = p.x;
-                if (p.y < minSY) minSY = p.y;
-                if (p.y > maxSY) maxSY = p.y;
-            }
-            const scaledWidth = maxSX - minSX;
-            const scaledHeight = maxSY - minSY;
-            const targetMargin = 0.86;
-            let fitScale = 1;
-            if (scaledWidth > 0 && scaledHeight > 0) {
-                fitScale = Math.min(
-                    (width * targetMargin) / scaledWidth,
-                    (height * targetMargin) / scaledHeight
-                );
-                fitScale = Math.min(fitScale, 2.5);
-                fitScale = Math.max(fitScale, 0.5);
-            }
-            
-            // اعمال فیت اسکیل نهایی
-            let finalScaledBottom = scaledBottom.map(p => ({ x: p.x * fitScale, y: p.y * fitScale, z: p.z }));
-            let finalScaledTop = scaledTop.map(p => ({ x: p.x * fitScale, y: p.y * fitScale, z: p.z }));
-            
-            // محاسبه مجدد باندینگ باکس برای مرکزدهی
-            let allFinal = [...finalScaledBottom, ...finalScaledTop];
-            let finalMinX = Infinity, finalMaxX = -Infinity, finalMinY = Infinity, finalMaxY = -Infinity;
-            for (let p of allFinal) {
-                if (p.x < finalMinX) finalMinX = p.x;
-                if (p.x > finalMaxX) finalMaxX = p.x;
-                if (p.y < finalMinY) finalMinY = p.y;
-                if (p.y > finalMaxY) finalMaxY = p.y;
-            }
-            const centerOffsetX = (width - (finalMinX + finalMaxX)) / 2;
-            const verticalShift = 28;
-            const centerOffsetY = (height - (finalMinY + finalMaxY)) / 2 + verticalShift;
-            
-            // پروجکشن نهایی (بدون پرسپکتیو)
-            const projBottom = finalScaledBottom.map(p => ({ x: p.x + centerOffsetX, y: p.y + centerOffsetY }));
-            const projTop = finalScaledTop.map(p => ({ x: p.x + centerOffsetX, y: p.y + centerOffsetY }));
-            
-            // ساخت وجوه
-            const faces = [];
-            for (let i = 0; i < n; i++) {
-                const next = (i + 1) % n;
-                const p1 = projBottom[i];
-                const p2 = projBottom[next];
-                const p3 = projTop[next];
-                const p4 = projTop[i];
-                const points = [p1, p2, p3, p4];
-                const avgZ = (finalScaledBottom[i].z + finalScaledBottom[next].z + finalScaledTop[next].z + finalScaledTop[i].z) / 4;
-                faces.push({ type: 'lateral', points: points, depth: avgZ, index: i });
-            }
-            const baseDepth = finalScaledBottom.reduce((sum, p) => sum + p.z, 0) / n;
-            faces.push({ type: 'base', points: projBottom, depth: baseDepth });
-            const topDepth = finalScaledTop.reduce((sum, p) => sum + p.z, 0) / n;
-            faces.push({ type: 'top', points: projTop, depth: topDepth });
-            
-            faces.sort((a, b) => a.depth - b.depth);
-            
-            faces.forEach(face => {
-                if (face.type === 'lateral') {
-                    const grad = ctx.createLinearGradient(
-                        face.points[0].x, face.points[0].y,
-                        face.points[2].x, face.points[2].y
-                    );
-                    const idx = face.index;
-                    grad.addColorStop(0, idx % 2 === 0 ? '#3b9eff' : '#5f7eff');
-                    grad.addColorStop(0.7, '#1f3f7f');
-                    drawFace3D(face.points, grad, 'rgba(255,245,190,0.4)', 1.3);
-                } else if (face.type === 'base') {
-                    drawFace3D(face.points, 'rgba(200, 145, 75, 0.92)', '#ffcf88', 1.5);
-                } else if (face.type === 'top') {
-                    const topGrad = ctx.createLinearGradient(centerOffsetX-30, centerOffsetY-70, centerOffsetX+30, centerOffsetY-20);
-                    topGrad.addColorStop(0, 'rgba(250, 190, 100, 0.98)');
-                    topGrad.addColorStop(1, 'rgba(220, 150, 70, 0.95)');
-                    drawFace3D(face.points, topGrad, '#ffddbb', 1.6);
-                }
-            });
-            
-            ctx.lineWidth = 1.4;
-            ctx.strokeStyle = 'rgba(255,240,180,0.65)';
-            for (let i = 0; i < n; i++) {
-                ctx.beginPath();
-                ctx.moveTo(projBottom[i].x, projBottom[i].y);
-                ctx.lineTo(projTop[i].x, projTop[i].y);
-                ctx.stroke();
-            }
-            
-            ctx.save();
-            ctx.globalCompositeOperation = 'lighter';
-            const glow = ctx.createRadialGradient(centerOffsetX-15, centerOffsetY-70, 8, centerOffsetX, centerOffsetY-50, 130);
-            glow.addColorStop(0, 'rgba(255,240,180,0.4)');
-            glow.addColorStop(1, 'rgba(255,220,100,0)');
-            ctx.fillStyle = glow;
-            ctx.beginPath();
-            ctx.arc(centerOffsetX-8, centerOffsetY-55, 80, 0, Math.PI*2);
-            ctx.fill();
-            ctx.restore();
+            geometryDisplay.drawSolid(ctx, canvas.width, canvas.height, 'prism', getValues(), rotatePoint3D);
         }
-        
+
         function refresh() {
             calculateAndUpdate();
             if (currentView === 'net') drawNet();
@@ -1533,9 +719,8 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
         function setupCanvas() {
             const container = canvas.parentElement;
             if (!container) return;
-            const containerWidth = container.clientWidth - 16;
-            let newWidth = Math.min(containerWidth, 780);
-            newWidth = Math.max(newWidth, 300);
+            const containerWidth = container.clientWidth - 10;
+            const newWidth = Math.min(containerWidth, 780);
             canvas.width = newWidth;
             canvas.height = Math.floor(newWidth * 0.68);
             canvas.style.width = `${canvas.width}px`;
@@ -1545,17 +730,20 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
         
         function setView(view) {
             currentView = view;
+            showNetBtn.setAttribute('aria-pressed', String(view === 'net'));
+            document.getElementById('foldKey').hidden = view === '3d';
+            show3DBtn.setAttribute('aria-pressed', String(view === '3d'));
             if (view === 'net') {
                 showNetBtn.classList.add('btn-active');
                 show3DBtn.classList.remove('btn-active');
-                viewLabel.innerText = '🧩 گسترده (Net) | درگ کنید + مقیاس پویا';
+                viewLabel.innerText = 'گسترده از دو قاعده و مستطیل‌های جانبی تشکیل شده است.';
                 netOffsetX = 0;
                 netOffsetY = 0;
                 canvas.style.cursor = 'grab';
             } else {
                 show3DBtn.classList.add('btn-active');
                 showNetBtn.classList.remove('btn-active');
-                viewLabel.innerText = '📦 نمای سه‌بعدی متعامد | چرخش با ماوس/لمس + بدون پرسپکتیو';
+                viewLabel.innerText = 'برای چرخاندن شکل، تصویر را بکشید یا از کلیدهای جهت‌دار استفاده کنید.';
                 canvas.style.cursor = 'grab';
             }
             refresh();
@@ -1664,100 +852,78 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             netOffsetX = 0;
             netOffsetY = 0;
             rotationY = -0.65;
-            rotationX = 0.35;
+            rotationX = -0.38;
             refresh();
         });
         showNetBtn.addEventListener('click', () => setView('net'));
         show3DBtn.addEventListener('click', () => setView('3d'));
         
+
+        const resetView = document.getElementById('resetView');
+        resetView.addEventListener('click', () => {
+            netOffsetX = netOffsetY = 0;
+            rotationX = -0.38;
+            rotationY = -0.65;
+            refresh();
+        });
+        canvas.addEventListener('keydown', event => {
+            const steps = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]};
+            const step = steps[event.key];
+            if (!step) return;
+            event.preventDefault();
+            const [x, y] = step;
+            if (currentView === '3d') {
+                rotationY += x * 0.14;
+                rotationX = Math.max(-1.5, Math.min(1.5, rotationX + y * 0.14));
+            } else {
+                netOffsetX = Math.max(-canvas.width * 0.3, Math.min(canvas.width * 0.3, netOffsetX + x * 12));
+                netOffsetY = Math.max(-canvas.height * 0.3, Math.min(canvas.height * 0.3, netOffsetY + y * 12));
+            }
+            refresh();
+        });
+
         window.addEventListener('resize', () => setTimeout(setupCanvas, 80));
         setupCanvas();
         setView('net');
     })();
 </script>
-</body>
-</html>
 </template>
-
 <template id="cube">
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>محاسبه‌گر مکعب مستطیل | گسترده استاندارد + سه‌بعدی</title>
-    <style>
-
-html,body{direction:rtl;unicode-bidi:embed;}
-input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;text-align:right;}
-.result-item{gap:10px;}
-.result-value{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;direction:ltr;text-align:left;}
-#dimensions{direction:rtl;text-align:right;display:inline-block;}
-.unit{white-space:nowrap;}
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 10px; overflow-x: hidden; }
-        .container { max-width: 1300px; margin: 0 auto; width: 100%; }
-        h1 { text-align: center; color: white; margin-bottom: 15px; font-size: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-        .main-card { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); border-radius: 20px; padding: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); }
-        .two-columns { display: grid; grid-template-columns: 1fr 1.2fr; gap: 15px; }
-        .input-panel { background: rgba(0, 0, 0, 0.35); border-radius: 16px; padding: 14px; }
-        .input-group { margin-bottom: 12px; }
-        label { display: block; color: white; margin-bottom: 5px; font-weight: 600; font-size: 12px; }
-        input { width: 100%; padding: 8px 12px; border: none; border-radius: 10px; font-size: 14px; background: rgba(255, 255, 255, 0.95); }
-        input:focus { outline: none; background: white; box-shadow: 0 0 0 3px rgba(255, 217, 102, 0.5); }
-        .btn-group { display: flex; gap: 8px; margin: 12px 0 10px; }
-        button { flex: 1; padding: 6px 8px; border: none; border-radius: 25px; font-size: 12px; font-weight: bold; cursor: pointer; transition: transform 0.1s; }
-        button:active { transform: scale(0.97); }
-        .btn-primary { background: linear-gradient(135deg, #ffb347, #ff8c1a); color: white; }
-        .btn-secondary { background: #3a546d; color: white; }
-        .btn-active { background: linear-gradient(135deg, #28a745, #20c997); color: white; }
-        .view-toggle { display: flex; gap: 8px; margin-bottom: 10px; }
-        .view-btn { flex: 1; padding: 6px; background: rgba(0, 0, 0, 0.5); color: white; border: 1px solid rgba(255,255,255,0.3); font-size: 11px; cursor: pointer; transition: all 0.2s; }
-        .view-btn:hover { background: rgba(0, 0, 0, 0.7); }
-        .results-panel { background: rgba(0, 0, 0, 0.45); border-radius: 12px; padding: 10px; margin-top: 10px; }
-        .result-item { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.2); color: white; }
-        .result-item:last-child { border-bottom: none; }
-        .result-label { font-size: 12px; font-weight: 500; }
-        .result-value { font-size: 16px; font-weight: bold; color: #ffd966; text-align: left; direction: ltr; }
-        .formula-text { font-size: 9px; display: block; color: #ffd966aa; font-weight: normal; direction: rtl; text-align: left; }
-        .unit { font-size: 9px; margin-right: 3px; }
-        .drawing-panel { background: rgba(0, 0, 0, 0.35); border-radius: 16px; padding: 10px; }
-        .canvas-container { background: #1a1a2e; border-radius: 12px; padding: 6px; display: flex; justify-content: center; align-items: center; min-height: 380px; position: relative; }
-        #mainCanvas { background: linear-gradient(145deg, #16213e, #0f0f1a); border-radius: 10px; display: block; margin: 0 auto; box-shadow: 0 4px 15px rgba(0,0,0,0.3); width: 100%; height: auto; cursor: grab; transition: all 0.2s; }
-        #mainCanvas:active { cursor: grabbing; }
-        .info-text { color: rgba(255, 255, 255, 0.7); text-align: center; margin-top: 8px; font-size: 9px; }
-        .badge { background: rgba(255, 217, 102, 0.2); padding: 2px 6px; border-radius: 15px; font-size: 9px; display: inline-block; }
-        @media (max-width: 768px) { .two-columns { grid-template-columns: 1fr; gap: 12px; } body { padding: 6px; } h1 { font-size: 18px; } .canvas-container { min-height: 340px; } }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>📦 محاسبه‌گر مکعب مستطیل | گسترده استاندارد + سه‌بعدی</h1>
+<div class="container">
+        <h1>مکعب‌مستطیل</h1>
         <div class="main-card">
             <div class="two-columns">
-                <div class="input-panel">
-                    <div class="input-group"><label>📏 طول (Length) - ضلع جلو</label><input type="number" id="length" value="5" step="any"></div>
-                    <div class="input-group"><label>📐 عرض (Width) - ضلع کنار</label><input type="number" id="width" value="6" step="any"></div>
-                    <div class="input-group"><label>📏 ارتفاع (Height)</label><input type="number" id="height" value="6" step="any"></div>
-                    <div class="btn-group"><button id="updateBtn" class="btn-primary">✨ بروزرسانی</button><button id="resetBtn" class="btn-secondary">🔄 بازنشانی</button></div>
-                    <div class="results-panel">
-                        <div class="result-item"><span class="result-label">🧮 مساحت کل</span><span class="result-value"><span id="totalArea">0</span><span class="unit">cm²</span><span class="formula-text">(۲ × (l×w + w×h + l×h))</span></span></div>
-                        <div class="result-item"><span class="result-label">📐 مساحت جانبی</span><span class="result-value"><span id="lateralArea">0</span><span class="unit">cm²</span><span class="formula-text">(۲ × h × (l + w))</span></span></div>
-                        <div class="result-item"><span class="result-label">💧 حجم</span><span class="result-value"><span id="volume">0</span><span class="unit">cm³</span><span class="formula-text">(l × w × h)</span></span></div>
-                        <div class="result-item"><span class="result-label">🔍 ابعاد</span><span class="result-value" style="font-size: 13px;"><span id="dimensions">5 × 6 × 6</span></span></div>
-                    </div>
-                    <div class="info-text">⚡ گسترده استاندارد: بالا و پایین به جلو متصل هستند</div>
-                </div>
                 <div class="drawing-panel">
-                    <div class="view-toggle"><button id="showNetBtn" class="view-btn btn-active">🧩 گسترده (Net) استاندارد</button><button id="show3DBtn" class="view-btn">📦 حجم سه‌بعدی (چرخش با ماوس)</button></div>
-                    <div class="canvas-container"><canvas id="mainCanvas" width="550" height="450"></canvas></div>
-                    <div class="info-text"><span class="badge" id="viewLabel">گسترده استاندارد مکعب | بالا↗️ و پایین↙️ به جلو متصل</span><span class="badge" style="margin-right:5px;">✨ مقیاس هوشمند + ضدخروج</span><span class="badge">🖱️ چرخش سه‌بعدی فعال</span></div>
+                    <div class="view-toggle"><button id="showNetBtn" aria-pressed="true" class="view-btn btn-active">گسترده</button><button id="show3DBtn" aria-pressed="false" class="view-btn">نمای سه‌بعدی</button></div>
+                    <div class="canvas-container"><canvas id="mainCanvas" tabindex="0" role="img" aria-label="نمای هندسی شکل" aria-describedby="viewLabel" width="550" height="450"></canvas></div>
+                    
+                    <div class="display-tools">
+                        <ul class="legend" aria-label="راهنمای رنگ‌ها و خطوط">
+                            <li><span class="swatch base" aria-hidden="true"></span>قاعده</li>
+                            <li><span class="swatch box-side" aria-hidden="true"></span>سطح جانبی</li>
+                            <li id="foldKey"><span class="swatch fold" aria-hidden="true"></span>خط تا</li>
+                        </ul>
+                        <button type="button" class="reset-view" id="resetView">بازنشانی نما</button>
+                    </div>
+                    <p class="info-text" id="viewLabel">وجه‌های بالا و پایین به وجه جلو متصل‌اند.</p>
+                </div>
+                <div class="input-panel"><h2>ابعاد شکل</h2>
+                    <div class="input-group"><label for="length">طول ضلع جلو (l)</label><input type="number" id="length" value="5" step="any"></div>
+                    <div class="input-group"><label for="width">عرض ضلع کنار (w)</label><input type="number" id="width" value="6" step="any"></div>
+                    <div class="input-group"><label for="height">ارتفاع (h)</label><input type="number" id="height" value="6" step="any"></div>
+                    <div class="btn-group"><button id="updateBtn" class="btn-primary">محاسبه</button><button id="resetBtn" class="btn-secondary">بازنشانی</button></div>
+                    <div class="results-panel" aria-live="polite"><h2>نتایج محاسبه</h2>
+                        <div class="result-item"><span class="result-label">مساحت کل</span><span class="result-value"><span id="totalArea">0</span><span class="unit">cm²</span></span><span class="formula-text">(۲ × (l×w + w×h + l×h))</span></div>
+                        <div class="result-item"><span class="result-label">مساحت جانبی</span><span class="result-value"><span id="lateralArea">0</span><span class="unit">cm²</span></span><span class="formula-text">(۲ × h × (l + w))</span></div>
+                        <div class="result-item"><span class="result-label">حجم</span><span class="result-value"><span id="volume">0</span><span class="unit">cm³</span></span><span class="formula-text">(l × w × h)</span></div>
+                        <div class="result-item"><span class="result-label">ابعاد</span><span class="result-value"><span id="dimensions">5 × 6 × 6</span></span></div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
-    <script>
+<script>
         (function() {
             const lengthInput = document.getElementById('length');
             const widthInput = document.getElementById('width');
@@ -1780,7 +946,7 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             let lastDragX = 0, lastDragY = 0;
             
             let rotationY = -0.65;
-            let rotationX = 0.35;
+            let rotationX = -0.38;
             let isDragging3D = false;
             let lastDragX3D = 0, lastDragY3D = 0;
             
@@ -1814,111 +980,6 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             //        [ بالا (l × w) ]
             // [ چپ (w × h) ] [ جلو (l × h) ] [ راست (w × h) ] [ عقب (l × h) ]
             //        [ پایین (l × w) ]
-            function drawNet() {
-                let { l, w, h } = getValues();
-                const width = canvas.width, height = canvas.height;
-                ctx.clearRect(0, 0, width, height);
-                if (width <= 0 || height <= 0) return;
-                
-                // ابعاد هر وجه پس از مقیاس‌گذاری
-                const faceLW = l;  // طول در عرض (برای بالا و پایین)
-                const faceLH = l;  // طول در ارتفاع (برای جلو و عقب)
-                const faceWH = w;  // عرض در ارتفاع (برای چپ و راست)
-                
-                // عرض کل گسترده: 4 وجه در ردیف وسط: چپ + جلو + راست + عقب
-                const totalNetWidth = w + l + w + l;  // = 2l + 2w
-                // ارتفاع کل گسترده: بالا + جلو + پایین (چون بالا و پایین به جلو متصلند)
-                const totalNetHeight = w + h + w;     // = 2w + h (بالا به ارتفاع w، جلو به ارتفاع h، پایین به ارتفاع w)
-                
-                const marginPercent = 0.08;
-                const availableWidth = width * (1 - marginPercent * 2);
-                const availableHeight = height * (1 - marginPercent * 2);
-                
-                let scale = Math.min(
-                    availableWidth / totalNetWidth,
-                    availableHeight / totalNetHeight
-                );
-                scale = Math.min(scale, 35);
-                scale = Math.max(scale, 2);
-                
-                const L = l * scale;  // طول (بعد افقی وجه جلو)
-                const W = w * scale;  // عرض (بعد افقی وجه کناری)
-                const H = h * scale;  // ارتفاع (بعد عمودی وجه جلو)
-                
-                // محاسبه نقطه شروع (بالا-چپ گسترده) با احتساب درگ
-                const totalDrawWidth = 2 * L + 2 * W;
-                const totalDrawHeight = 2 * W + H;
-                
-                let startX = (width - totalDrawWidth) / 2 + netOffsetX;
-                let startY = (height - totalDrawHeight) / 2 + netOffsetY;
-                
-                // مختصات ردیف وسط (جلو، چپ، راست، عقب)
-                // ترتیب از چپ به راست: چپ (w×h) | جلو (l×h) | راست (w×h) | عقب (l×h)
-                const leftX = startX;
-                const frontX = startX + W;
-                const rightX = startX + W + L;
-                const backX = startX + W + L + W;
-                
-                const middleY = startY + W;  // ردیف وسط (چون بالا به ارتفاع W است)
-                
-                // مختصات بالا (بالای وجه جلو)
-                const topX = frontX;
-                const topY = startY;
-                
-                // مختصات پایین (پایین وجه جلو)
-                const bottomX = frontX;
-                const bottomY = middleY + H;
-                
-                const areas = { 
-                    frontBack: l * h, 
-                    rightLeft: w * h, 
-                    topBottom: l * w 
-                };
-                
-                const colors = { 
-                    frontBack: 'rgba(74, 144, 226, 0.85)', 
-                    rightLeft: 'rgba(80, 200, 120, 0.85)', 
-                    topBottom: 'rgba(255, 160, 80, 0.85)' 
-                };
-                
-                function drawFace(x, y, wd, ht, color, area, name) {
-                    if (wd <= 0 || ht <= 0) return;
-                    ctx.beginPath();
-                    ctx.rect(x, y, wd, ht);
-                    ctx.fillStyle = color;
-                    ctx.fill();
-                    ctx.strokeStyle = '#ffcc77';
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-                    
-                    const fontSize = Math.max(9, Math.min(14, wd / 7));
-                    ctx.font = `bold ${fontSize}px "Segoe UI"`;
-                    ctx.fillStyle = '#ffffff';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(area.toFixed(1), x + wd/2, y + ht/2);
-                    
-                    ctx.font = `8px "Segoe UI"`;
-                    ctx.fillStyle = '#ffddaa';
-                    ctx.fillText(name, x + wd/2, y + ht - 4);
-                }
-                
-                // ردیف وسط: چپ، جلو، راست، عقب
-                drawFace(leftX, middleY, W, H, colors.rightLeft, areas.rightLeft, "چپ");     // چپ
-                drawFace(frontX, middleY, L, H, colors.frontBack, areas.frontBack, "جلو");   // جلو
-                drawFace(rightX, middleY, W, H, colors.rightLeft, areas.rightLeft, "راست");  // راست
-                drawFace(backX, middleY, L, H, colors.frontBack, areas.frontBack, "عقب");    // عقب
-                
-                // بالا (متصل به بالای جلو)
-                drawFace(topX, topY, L, W, colors.topBottom, areas.topBottom, "بالا");
-                
-                // پایین (متصل به پایین جلو)
-                drawFace(bottomX, bottomY, L, W, colors.topBottom, areas.topBottom, "پایین");
-                
-                ctx.textAlign = 'left';
-            }
-            
-            // ======================== توابع سه بعدی ========================
             function rotatePoint3D(x, y, z) {
                 const cosY = Math.cos(rotationY), sinY = Math.sin(rotationY);
                 const cosX = Math.cos(rotationX), sinX = Math.sin(rotationX);
@@ -1930,193 +991,16 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
                 
                 return { x: x1, y: y2, z: z2 };
             }
-            
-            function projectPerspective(x, y, z, cx, cy, perspective = 900) {
-                const scale = perspective / (perspective + z);
-                return { x: cx + x * scale, y: cy + y * scale };
+
+            function drawNet() {
+                geometryDisplay.drawNet(ctx, canvas.width, canvas.height, 'cube', getValues(),
+                    { x: netOffsetX, y: netOffsetY });
             }
-            
-            function drawFace3D(points, fillStyle, strokeStyle, lineWidth = 1.2) {
-                if (points.length < 3) return;
-                ctx.beginPath();
-                ctx.moveTo(points[0].x, points[0].y);
-                for (let i = 1; i < points.length; i++) {
-                    ctx.lineTo(points[i].x, points[i].y);
-                }
-                ctx.closePath();
-                ctx.fillStyle = fillStyle;
-                ctx.fill();
-                ctx.lineWidth = lineWidth;
-                ctx.strokeStyle = strokeStyle;
-                ctx.stroke();
-            }
-            
+
             function draw3D() {
-                let { l, w, h } = getValues();
-                const width = canvas.width, height = canvas.height;
-                if (width <= 0 || height <= 0) return;
-                
-                const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-                bgGrad.addColorStop(0, '#12192f');
-                bgGrad.addColorStop(1, '#070b16');
-                ctx.fillStyle = bgGrad;
-                ctx.fillRect(0, 0, width, height);
-                
-                const shadowGrad = ctx.createRadialGradient(width/2, height - 40, 0, width/2, height - 40, 140);
-                shadowGrad.addColorStop(0, 'rgba(0,0,0,0.5)');
-                shadowGrad.addColorStop(0.5, 'rgba(0,0,0,0.2)');
-                shadowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-                ctx.fillStyle = shadowGrad;
-                ctx.beginPath();
-                ctx.ellipse(width/2, height - 45, width * 0.2, height * 0.07, 0, 0, Math.PI * 2);
-                ctx.fill();
-                
-                const halfL = l / 2;
-                const halfW = w / 2;
-                const halfH = h / 2;
-                
-                const localVertices = [
-                    { x: -halfL, y: -halfH, z: -halfW },
-                    { x:  halfL, y: -halfH, z: -halfW },
-                    { x: -halfL, y: -halfH, z:  halfW },
-                    { x:  halfL, y: -halfH, z:  halfW },
-                    { x: -halfL, y:  halfH, z: -halfW },
-                    { x:  halfL, y:  halfH, z: -halfW },
-                    { x: -halfL, y:  halfH, z:  halfW },
-                    { x:  halfL, y:  halfH, z:  halfW }
-                ];
-                
-                let rotatedVertices = localVertices.map(v => rotatePoint3D(v.x, v.y, v.z));
-                
-                let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-                for (let p of rotatedVertices) {
-                    if (p.x < minX) minX = p.x;
-                    if (p.x > maxX) maxX = p.x;
-                    if (p.y < minY) minY = p.y;
-                    if (p.y > maxY) maxY = p.y;
-                }
-                
-                const modelWidth = maxX - minX;
-                const modelHeight = maxY - minY;
-                const maxDim = Math.max(modelWidth, modelHeight);
-                
-                let baseScale = Math.min(width, height) / (maxDim * 2.2);
-                baseScale = Math.min(baseScale, 18);
-                baseScale = Math.max(baseScale, 2.5);
-                
-                let scaledVertices = rotatedVertices.map(p => ({ x: p.x * baseScale, y: p.y * baseScale, z: p.z }));
-                
-                let tempProjected = scaledVertices.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, 900));
-                let tempMinX = Infinity, tempMaxX = -Infinity, tempMinY = Infinity, tempMaxY = -Infinity;
-                for (let p of tempProjected) {
-                    if (p.x < tempMinX) tempMinX = p.x;
-                    if (p.x > tempMaxX) tempMaxX = p.x;
-                    if (p.y < tempMinY) tempMinY = p.y;
-                    if (p.y > tempMaxY) tempMaxY = p.y;
-                }
-                
-                const projWidth = tempMaxX - tempMinX;
-                const projHeight = tempMaxY - tempMinY;
-                let fitScale = 1;
-                if (projWidth > 0 && projHeight > 0) {
-                    const targetMargin = 0.85;
-                    fitScale = Math.min(
-                        (width * targetMargin) / projWidth,
-                        (height * targetMargin) / projHeight
-                    );
-                    fitScale = Math.min(fitScale, 2.8);
-                    fitScale = Math.max(fitScale, 0.45);
-                }
-                
-                let finalScaledVertices = scaledVertices.map(p => ({ x: p.x * fitScale, y: p.y * fitScale, z: p.z }));
-                
-                let finalProjected = finalScaledVertices.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, 900));
-                let finalMinX = Infinity, finalMaxX = -Infinity, finalMinY = Infinity, finalMaxY = -Infinity;
-                for (let p of finalProjected) {
-                    if (p.x < finalMinX) finalMinX = p.x;
-                    if (p.x > finalMaxX) finalMaxX = p.x;
-                    if (p.y < finalMinY) finalMinY = p.y;
-                    if (p.y > finalMaxY) finalMaxY = p.y;
-                }
-                
-                const centerOffsetX = (width - (finalMinX + finalMaxX)) / 2;
-                const verticalShift = 25;
-                const centerOffsetY = (height - (finalMinY + finalMaxY)) / 2 + verticalShift;
-                
-                const projectedVertices = finalScaledVertices.map(p => 
-                    projectPerspective(p.x, p.y, p.z, centerOffsetX, centerOffsetY, 900)
-                );
-                
-                const faces = [
-                    { indices: [0, 1, 5, 4], color: 'rgba(74, 144, 226, 0.88)', name: 'front' },
-                    { indices: [2, 3, 7, 6], color: 'rgba(100, 100, 200, 0.75)', name: 'back' },
-                    { indices: [0, 2, 6, 4], color: 'rgba(80, 180, 100, 0.85)', name: 'left' },
-                    { indices: [1, 3, 7, 5], color: 'rgba(60, 160, 110, 0.85)', name: 'right' },
-                    { indices: [4, 5, 7, 6], color: 'rgba(255, 160, 80, 0.92)', name: 'top' },
-                    { indices: [0, 1, 3, 2], color: 'rgba(50, 50, 70, 0.8)', name: 'bottom' }
-                ];
-                
-                const facesWithDepth = faces.map(face => {
-                    let avgZ = 0;
-                    for (let idx of face.indices) {
-                        avgZ += finalScaledVertices[idx].z;
-                    }
-                    avgZ /= face.indices.length;
-                    return { ...face, depth: avgZ };
-                });
-                
-                facesWithDepth.sort((a, b) => a.depth - b.depth);
-                
-                facesWithDepth.forEach(face => {
-                    const points = face.indices.map(idx => projectedVertices[idx]);
-                    let fillColor = face.color;
-                    if (face.name === 'top') {
-                        const grad = ctx.createLinearGradient(points[0].x, points[0].y, points[2].x, points[2].y);
-                        grad.addColorStop(0, '#ffb347');
-                        grad.addColorStop(1, '#ff8c1a');
-                        fillColor = grad;
-                    } else if (face.name === 'front') {
-                        const grad = ctx.createLinearGradient(points[0].x, points[0].y, points[2].x, points[2].y);
-                        grad.addColorStop(0, '#5a9ad0');
-                        grad.addColorStop(1, '#3a7ab0');
-                        fillColor = grad;
-                    } else if (face.name === 'right') {
-                        const grad = ctx.createLinearGradient(points[0].x, points[0].y, points[2].x, points[2].y);
-                        grad.addColorStop(0, '#4a9a6a');
-                        grad.addColorStop(1, '#3a7a5a');
-                        fillColor = grad;
-                    }
-                    drawFace3D(points, fillColor, 'rgba(255,220,150,0.5)', 1.3);
-                });
-                
-                const edges = [
-                    [0,1], [1,3], [3,2], [2,0],
-                    [4,5], [5,7], [7,6], [6,4],
-                    [0,4], [1,5], [2,6], [3,7]
-                ];
-                
-                ctx.lineWidth = 1.8;
-                ctx.strokeStyle = 'rgba(255,240,180,0.7)';
-                for (let edge of edges) {
-                    ctx.beginPath();
-                    ctx.moveTo(projectedVertices[edge[0]].x, projectedVertices[edge[0]].y);
-                    ctx.lineTo(projectedVertices[edge[1]].x, projectedVertices[edge[1]].y);
-                    ctx.stroke();
-                }
-                
-                ctx.save();
-                ctx.globalCompositeOperation = 'lighter';
-                const topCenter = projectedVertices[4];
-                const glow = ctx.createRadialGradient(topCenter.x - 10, topCenter.y - 15, 5, topCenter.x, topCenter.y - 10, 100);
-                glow.addColorStop(0, 'rgba(255,240,180,0.35)');
-                glow.addColorStop(1, 'rgba(255,220,100,0)');
-                ctx.fillStyle = glow;
-                ctx.beginPath();
-                ctx.arc(topCenter.x - 5, topCenter.y - 20, 70, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
+                geometryDisplay.drawSolid(ctx, canvas.width, canvas.height, 'cube', getValues(), rotatePoint3D);
             }
-            
+
             function refresh() { 
                 calculateAndUpdate(); 
                 if (currentView === 'net') drawNet(); 
@@ -2126,9 +1010,8 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             function setupCanvas() { 
                 const container = canvas.parentElement; 
                 if (!container) return;
-                const containerWidth = container.clientWidth - 12; 
-                let newWidth = Math.min(containerWidth, 580);
-                newWidth = Math.max(newWidth, 300);
+                const containerWidth = container.clientWidth - 10; 
+                const newWidth = Math.min(containerWidth, 780);
                 canvas.width = newWidth; 
                 canvas.height = Math.floor(newWidth * 0.78); 
                 canvas.style.width = `${canvas.width}px`; 
@@ -2137,18 +1020,21 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             }
             
             function setView(view) { 
-                currentView = view; 
+                currentView = view;
+                showNetBtn.setAttribute('aria-pressed', String(view === 'net'));
+                document.getElementById('foldKey').hidden = view === '3d';
+                show3DBtn.setAttribute('aria-pressed', String(view === '3d'));
                 if (view === 'net') { 
                     showNetBtn.classList.add('btn-active'); 
                     show3DBtn.classList.remove('btn-active'); 
-                    viewLabel.innerText = 'گسترده استاندارد | بالا↗️ و پایین↙️ به جلو متصل'; 
+                    viewLabel.innerText = 'وجه‌های بالا و پایین به وجه جلو متصل‌اند.'; 
                     canvas.style.cursor = 'grab';
                     netOffsetX = 0;
                     netOffsetY = 0;
                 } else { 
                     show3DBtn.classList.add('btn-active'); 
                     showNetBtn.classList.remove('btn-active'); 
-                    viewLabel.innerText = 'نمایش حجم سه بعدی | چرخش با ماوس/لمس'; 
+                    viewLabel.innerText = 'برای چرخاندن شکل، تصویر را بکشید یا از کلیدهای جهت‌دار استفاده کنید.'; 
                     canvas.style.cursor = 'grab';
                 } 
                 refresh(); 
@@ -2250,330 +1136,93 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
                 netOffsetX = 0; 
                 netOffsetY = 0;
                 rotationY = -0.65;
-                rotationX = 0.35;
+                rotationX = -0.38;
                 refresh(); 
             });
             showNetBtn.addEventListener('click', () => setView('net'));
             show3DBtn.addEventListener('click', () => setView('3d'));
             
+
+        const resetView = document.getElementById('resetView');
+        resetView.addEventListener('click', () => {
+            netOffsetX = netOffsetY = 0;
+            rotationX = -0.38;
+            rotationY = -0.65;
+            refresh();
+        });
+        canvas.addEventListener('keydown', event => {
+            const steps = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]};
+            const step = steps[event.key];
+            if (!step) return;
+            event.preventDefault();
+            const [x, y] = step;
+            if (currentView === '3d') {
+                rotationY += x * 0.14;
+                rotationX = Math.max(-1.5, Math.min(1.5, rotationX + y * 0.14));
+            } else {
+                netOffsetX = Math.max(-canvas.width * 0.3, Math.min(canvas.width * 0.3, netOffsetX + x * 12));
+                netOffsetY = Math.max(-canvas.height * 0.3, Math.min(canvas.height * 0.3, netOffsetY + y * 12));
+            }
+            refresh();
+        });
+
             window.addEventListener('resize', () => setTimeout(setupCanvas, 100));
             setupCanvas();
             setView('net');
         })();
     </script>
-</body>
-</html>
 </template>
-
 <template id="cylinder">
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>استوانه  </title>
-    <style>
-
-html,body{direction:rtl;unicode-bidi:embed;}
-input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;text-align:right;}
-.result-item{gap:10px;}
-.result-value{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;direction:ltr;text-align:left;}
-#dimensions{direction:rtl;text-align:right;display:inline-block;}
-.unit{white-space:nowrap;}
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1f4037, #99f2c8);
-            min-height: 100vh;
-            padding: 10px;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 15px;
-            font-size: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .main-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        .two-columns {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 15px;
-        }
-
-        .input-panel {
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: 16px;
-            padding: 14px;
-        }
-
-        .input-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            color: white;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 12px;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 10px;
-            font-size: 14px;
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        input:focus {
-            outline: none;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(255, 217, 102, 0.5);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            margin: 12px 0 10px;
-        }
-
-        button {
-            flex: 1;
-            padding: 6px 8px;
-            border: none;
-            border-radius: 25px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        button:active {
-            transform: scale(0.97);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ffb347, #ff8c1a);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #2c5a4a;
-            color: white;
-        }
-
-        .btn-active {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-        }
-
-        .view-toggle {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .view-btn {
-            flex: 1;
-            padding: 6px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .view-btn:hover {
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        .results-panel {
-            background: rgba(0, 0, 0, 0.45);
-            border-radius: 12px;
-            padding: 10px;
-            margin-top: 10px;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
-        .result-label {
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .result-value {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffd966;
-            text-align: left;
-            direction: ltr;
-        }
-
-        .formula-text {
-            font-size: 9px;
-            display: block;
-            color: #ffd966aa;
-            font-weight: normal;
-            direction: rtl;
-            text-align: left;
-        }
-
-        .unit {
-            font-size: 9px;
-            margin-right: 3px;
-        }
-
-        .drawing-panel {
-            background: rgba(0, 0, 0, 0.35);
-            border-radius: 16px;
-            padding: 10px;
-        }
-
-        .canvas-container {
-            background: #1a1a2e;
-            border-radius: 12px;
-            padding: 6px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 400px;
-            position: relative;
-        }
-
-        #mainCanvas {
-            background: linear-gradient(145deg, #16213e, #0f0f1a);
-            border-radius: 10px;
-            display: block;
-            margin: 0 auto;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            height: auto;
-            cursor: grab;
-        }
-
-        #mainCanvas:active {
-            cursor: grabbing;
-        }
-
-        .info-text {
-            color: rgba(255, 255, 255, 0.7);
-            text-align: center;
-            margin-top: 8px;
-            font-size: 9px;
-        }
-
-        .badge {
-            background: rgba(255, 217, 102, 0.2);
-            padding: 2px 6px;
-            border-radius: 15px;
-            font-size: 9px;
-            display: inline-block;
-        }
-
-        @media (max-width: 768px) {
-            .two-columns {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            body {
-                padding: 6px;
-            }
-
-            h1 {
-                font-size: 18px;
-            }
-
-            .canvas-container {
-                min-height: 360px;
-            }
-        }
-    </style>
-</head>
-<body>
 <div class="container">
-    <h1>🧴 استوانه | نمای سه بعدی با قابلیت چرخش + گسترده (Net)</h1>
+    <h1>استوانه</h1>
     <div class="main-card">
         <div class="two-columns">
-            <div class="input-panel">
+            <div class="drawing-panel">
+                <div class="view-toggle">
+                    <button id="showNetBtn" aria-pressed="true" class="view-btn btn-active">گسترده</button>
+                    <button id="show3DBtn" aria-pressed="false" class="view-btn">نمای سه‌بعدی</button>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="mainCanvas" tabindex="0" role="img" aria-label="نمای هندسی شکل" aria-describedby="viewLabel" width="600" height="480"></canvas>
+                </div>
+                
+                    <div class="display-tools">
+                        <ul class="legend" aria-label="راهنمای رنگ‌ها و خطوط">
+                            <li><span class="swatch base" aria-hidden="true"></span>قاعده</li>
+                            <li><span class="swatch side" aria-hidden="true"></span>سطح جانبی</li>
+                            
+                        </ul>
+                        <button type="button" class="reset-view" id="resetView">بازنشانی نما</button>
+                    </div>
+                    <p class="info-text" id="viewLabel">گسترده از یک مستطیل و دو دایره تشکیل شده است.</p>
+            </div>
+            <div class="input-panel"><h2>ابعاد شکل</h2>
                 <div class="input-group">
-                    <label>📏 شعاع قاعده (r)</label>
+                    <label for="radius">شعاع قاعده (r)</label>
                     <input type="number" id="radius" value="5" step="any">
                 </div>
                 <div class="input-group">
-                    <label>📏 ارتفاع استوانه (h)</label>
+                    <label for="height">ارتفاع استوانه (h)</label>
                     <input type="number" id="height" value="8" step="any">
                 </div>
                 <div class="btn-group">
-                    <button id="updateBtn" class="btn-primary">✨ بروزرسانی</button>
-                    <button id="resetBtn" class="btn-secondary">🔄 بازنشانی</button>
+                    <button id="updateBtn" class="btn-primary">محاسبه</button>
+                    <button id="resetBtn" class="btn-secondary">بازنشانی</button>
                 </div>
-                <div class="results-panel">
-                    <div class="result-item"><span class="result-label">🧮 مساحت کل</span><span
-                            class="result-value"><span id="totalArea">0</span><span class="unit">cm²</span><span
-                            class="formula-text">(۲πr² + ۲πrh)</span></span></div>
-                    <div class="result-item"><span class="result-label">📐 مساحت جانبی</span><span
-                            class="result-value"><span id="lateralArea">0</span><span class="unit">cm²</span><span
-                            class="formula-text">(۲πrh)</span></span></div>
-                    <div class="result-item"><span class="result-label">💧 حجم</span><span class="result-value"><span
-                            id="volume">0</span><span class="unit">cm³</span><span
-                            class="formula-text">(πr²h)</span></span></div>
-                    <div class="result-item"><span class="result-label">🔍 مشخصات</span><span class="result-value"
-                                                                                             style="font-size: 13px;"><span
+                <div class="results-panel" aria-live="polite"><h2>نتایج محاسبه</h2>
+                    <div class="result-item"><span class="result-label">مساحت کل</span><span
+                            class="result-value"><span id="totalArea">0</span><span class="unit">cm²</span></span><span
+                            class="formula-text">(۲πr² + ۲πrh)</span></div>
+                    <div class="result-item"><span class="result-label">مساحت جانبی</span><span
+                            class="result-value"><span id="lateralArea">0</span><span class="unit">cm²</span></span><span
+                            class="formula-text">(۲πrh)</span></div>
+                    <div class="result-item"><span class="result-label">حجم</span><span class="result-value"><span
+                            id="volume">0</span><span class="unit">cm³</span></span><span
+                            class="formula-text">(πr²h)</span></div>
+                    <div class="result-item"><span class="result-label">مشخصات</span><span class="result-value"><span
                             id="dimensions">r=5, h=8</span></span></div>
                 </div>
-                <div class="info-text">⚡ چرخش سه بعدی با ماوس (کلیک و بکش) | مقیاس خودکار و همیشه در صفحه</div>
-            </div>
-            <div class="drawing-panel">
-                <div class="view-toggle">
-                    <button id="showNetBtn" class="view-btn btn-active">🧩 گسترده (Net)</button>
-                    <button id="show3DBtn" class="view-btn">📦 نمای ۳ بعدی (چرخشی)</button>
-                </div>
-                <div class="canvas-container">
-                    <canvas id="mainCanvas" width="600" height="480"></canvas>
-                </div>
-                <div class="info-text">
-                    <span class="badge" id="viewLabel">گسترده استوانه | مستطیل + دو دایره</span>
-                    <span class="badge" style="margin-right:5px;">✨ در نمای 3D: کلیک و بکشید تا بچرخد</span>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -2603,7 +1252,7 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
 
         // --- وضعیت چرخش سه بعدی (مشابه هرم) ---
         let rotationY = -0.65;    // چرخش حول محور Y
-        let rotationX = 0.35;     // چرخش حول محور X
+        let rotationX = -0.38;     // چرخش حول محور X
         let isDragging3D = false;
         let lastDragX3D = 0, lastDragY3D = 0;
 
@@ -2630,71 +1279,6 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
         }
 
         // ========== 1. نمای گسترده (Net) ==========
-        function drawNet() {
-            let {r, h} = getValues();
-            const width = canvas.width, height = canvas.height;
-            ctx.clearRect(0, 0, width, height);
-
-            const circumference = 2 * Math.PI * r;
-            const rectW = circumference;
-            const rectH = h;
-            const circleDiameter = 2 * r;
-
-            const netPureWidth = rectW;
-            const netPureHeight = rectH + circleDiameter * 2;
-
-            const marginPercent = 0.02;
-            const availableWidth = width * (1 - marginPercent * 2);
-            const availableHeight = height * (1 - marginPercent * 2);
-
-            let scale = Math.min(availableWidth / netPureWidth, availableHeight / netPureHeight);
-            scale = Math.min(scale, 12);
-            scale = Math.max(scale, 0.3);
-
-            const L = rectW * scale;
-            const W = rectH * scale;
-            const circleDiaScaled = circleDiameter * scale;
-            const circleRadiusScaled = r * scale;
-
-            const totalDrawWidth = L;
-            const totalDrawHeight = netPureHeight * scale;
-            const startX = (width - totalDrawWidth) / 2 + netOffsetX;
-            const startY = (height - totalDrawHeight) / 2 + netOffsetY;
-
-            const lateralColor = "rgba(74, 144, 226, 0.88)";
-            const baseColor = "rgba(255, 160, 80, 0.92)";
-            const strokeLight = "#ffdd99";
-
-            // مستطیل بدنه
-            const rectY = startY + circleDiaScaled;
-            ctx.beginPath();
-            ctx.rect(startX, rectY, L, W);
-            ctx.fillStyle = lateralColor;
-            ctx.fill();
-            ctx.strokeStyle = strokeLight;
-            ctx.lineWidth = 1.8;
-            ctx.stroke();
-
-            // دایره بالا
-            const topCircleCenterX = startX + L / 2;
-            const topCircleCenterY = startY + circleDiaScaled / 2;
-            ctx.beginPath();
-            ctx.arc(topCircleCenterX, topCircleCenterY, circleRadiusScaled, 0, 2 * Math.PI);
-            ctx.fillStyle = baseColor;
-            ctx.fill();
-            ctx.stroke();
-
-            // دایره پایین
-            const bottomCircleCenterY = startY + circleDiaScaled + W + circleDiaScaled / 2;
-            ctx.beginPath();
-            ctx.arc(topCircleCenterX, bottomCircleCenterY, circleRadiusScaled, 0, 2 * Math.PI);
-            ctx.fillStyle = baseColor;
-            ctx.fill();
-            ctx.stroke();
-        }
-
-        // ========== 2. نمای سه بعدی با تکنیک چرخش مشابه هرم ==========
-        // چرخش نقطه در فضای سه بعدی (دور محورهای Y و X)
         function rotatePoint3D(x, y, z) {
             const cosY = Math.cos(rotationY), sinY = Math.sin(rotationY);
             const cosX = Math.cos(rotationX), sinX = Math.sin(rotationX);
@@ -2710,183 +1294,15 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             return {x: x1, y: y2, z: z2};
         }
 
-        // تبدیل پرسپکتیو ساده
-        function projectPerspective(x, y, z, cx, cy, perspective = 800) {
-            const scale = perspective / (perspective + (z + 5));
-            return {
-                x: cx + x * scale,
-                y: cy + y * scale,
-                scale: scale
-            };
+        function drawNet() {
+            geometryDisplay.drawNet(ctx, canvas.width, canvas.height, 'cylinder', getValues(),
+                { x: netOffsetX, y: netOffsetY });
         }
 
         function draw3D() {
-            let {r, h} = getValues();
-            const width = canvas.width, height = canvas.height;
-
-            if (width <= 0 || height <= 0 || r <= 0 || h <= 0) return;
-
-            // پس‌زمینه گرادیان
-            const bg = ctx.createLinearGradient(0, 0, width, height);
-            bg.addColorStop(0, '#12192f');
-            bg.addColorStop(1, '#070b16');
-            ctx.fillStyle = bg;
-            ctx.fillRect(0, 0, width, height);
-
-            // سایه نرم زیر استوانه
-            const cx = width / 2;
-            const cy = height / 2 + 30;
-            const shadowGrad = ctx.createRadialGradient(cx, height - 55, 0, cx, height - 55, 130);
-            shadowGrad.addColorStop(0, 'rgba(0,0,0,0.45)');
-            shadowGrad.addColorStop(0.5, 'rgba(0,0,0,0.20)');
-            shadowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-            ctx.fillStyle = shadowGrad;
-            ctx.beginPath();
-            ctx.ellipse(cx, height - 55, 140, 20, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            // ------------------- مرحله 1: ایجاد نقاط سه بعدی -------------------
-            const segments = Math.max(32, Math.floor(32 * Math.sqrt(r / 5))); // کیفیت بالا
-            const bottomPoints3D = [];
-            const topPoints3D = [];
-
-            for (let i = 0; i <= segments; i++) {
-                const angle = i * 2 * Math.PI / segments;
-                const x = r * Math.cos(angle);
-                const z = r * Math.sin(angle);
-                // مختصات محلی: قاعده پایین در y = -h/2 ، قاعده بالا در y = +h/2 تا مرکز استوانه در (0,0,0) باشد
-                bottomPoints3D.push({x: x, y: -h / 2, z: z});
-                topPoints3D.push({x: x, y: h / 2, z: z});
-            }
-
-            // اعمال چرخش به تمام نقاط
-            const rotatedBottom = bottomPoints3D.map(p => rotatePoint3D(p.x, p.y, p.z));
-            const rotatedTop = topPoints3D.map(p => rotatePoint3D(p.x, p.y, p.z));
-
-            // ------------------- مرحله 2: مقیاس اولیه و bounding box برای fit -------------------
-            const perspectiveDist = 650;
-            // پروجکشن موقت برای محاسبه ابعاد
-            const tempProjBottom = rotatedBottom.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, perspectiveDist));
-            const tempProjTop = rotatedTop.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, perspectiveDist));
-            const allTempPoints = [...tempProjBottom, ...tempProjTop];
-
-            let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-            for (const p of allTempPoints) {
-                minX = Math.min(minX, p.x);
-                maxX = Math.max(maxX, p.x);
-                minY = Math.min(minY, p.y);
-                maxY = Math.max(maxY, p.y);
-            }
-            const projWidth = maxX - minX;
-            const projHeight = maxY - minY;
-
-            // محاسبه fitScale طوری که کل استوانه درون صفحه با حاشیه 88% قرار گیرد
-            const targetMargin = 0.88;
-            let fitScale = 1;
-            if (projWidth > 0 && projHeight > 0) {
-                fitScale = Math.min(
-                    (width * targetMargin) / projWidth,
-                    (height * targetMargin) / projHeight
-                );
-            }
-            fitScale = Math.min(fitScale, 5.5);
-            fitScale = Math.max(fitScale, 0.3);
-
-            // اعمال fitScale به نقاط چرخش یافته
-            const finalBottom = rotatedBottom.map(p => ({x: p.x * fitScale, y: p.y * fitScale, z: p.z}));
-            const finalTop = rotatedTop.map(p => ({x: p.x * fitScale, y: p.y * fitScale, z: p.z}));
-
-            // ------------------- مرحله 3: مرکزگذاری دقیق -------------------
-            const tempFinalBottom = finalBottom.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, perspectiveDist));
-            const tempFinalTop = finalTop.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, perspectiveDist));
-            const allFinal = [...tempFinalBottom, ...tempFinalTop];
-            let finalMinX = Infinity, finalMaxX = -Infinity, finalMinY = Infinity, finalMaxY = -Infinity;
-            for (const p of allFinal) {
-                finalMinX = Math.min(finalMinX, p.x);
-                finalMaxX = Math.max(finalMaxX, p.x);
-                finalMinY = Math.min(finalMinY, p.y);
-                finalMaxY = Math.max(finalMaxY, p.y);
-            }
-
-            const centerOffsetX = (width - (finalMinX + finalMaxX)) / 2;
-            const centerOffsetY = (height - (finalMinY + finalMaxY)) / 2;
-
-            // پروجکشن نهایی با مرکزدهی صحیح
-            const projBottom = finalBottom.map(p => projectPerspective(p.x, p.y, p.z, centerOffsetX, centerOffsetY, perspectiveDist));
-            const projTop = finalTop.map(p => projectPerspective(p.x, p.y, p.z, centerOffsetX, centerOffsetY, perspectiveDist));
-
-            // ------------------- رسم بدنه (نوارهای ذوزنقه‌ای) -------------------
-            for (let i = 0; i < segments; i++) {
-                const p1b = projBottom[i];
-                const p2b = projBottom[i + 1];
-                const p1t = projTop[i];
-                const p2t = projTop[i + 1];
-
-                ctx.beginPath();
-                ctx.moveTo(p1b.x, p1b.y);
-                ctx.lineTo(p2b.x, p2b.y);
-                ctx.lineTo(p2t.x, p2t.y);
-                ctx.lineTo(p1t.x, p1t.y);
-                ctx.closePath();
-
-                // گرادیانت ساده برای حجم نمایی
-                const grad = ctx.createLinearGradient(p1b.x, p1b.y, p1t.x, p1t.y);
-                grad.addColorStop(0, "rgba(80, 170, 210, 0.85)");
-                grad.addColorStop(1, "rgba(40, 110, 160, 0.85)");
-                ctx.fillStyle = grad;
-                ctx.fill();
-                ctx.strokeStyle = "rgba(255, 220, 150, 0.4)";
-                ctx.lineWidth = 0.8;
-                ctx.stroke();
-            }
-
-            // رسم قاعده پایین (با رنگ و سایه)
-            ctx.beginPath();
-            ctx.moveTo(projBottom[0].x, projBottom[0].y);
-            for (let i = 1; i <= segments; i++) {
-                ctx.lineTo(projBottom[i].x, projBottom[i].y);
-            }
-            ctx.closePath();
-            ctx.fillStyle = "rgba(210, 150, 70, 0.95)";
-            ctx.fill();
-            ctx.strokeStyle = "#ffcc88";
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-
-            // رسم قاعده بالا
-            ctx.beginPath();
-            ctx.moveTo(projTop[0].x, projTop[0].y);
-            for (let i = 1; i <= segments; i++) {
-                ctx.lineTo(projTop[i].x, projTop[i].y);
-            }
-            ctx.closePath();
-            ctx.fillStyle = "rgba(230, 170, 80, 0.95)";
-            ctx.fill();
-            ctx.stroke();
-
-            // برجسته کردن خطوط عمودی اصلی (برای زیبایی)
-            ctx.lineWidth = 1.2;
-            ctx.strokeStyle = '#ffdd99aa';
-            const edgeStep = Math.max(1, Math.floor(segments / 10));
-            for (let i = 0; i <= segments; i += edgeStep) {
-                ctx.beginPath();
-                ctx.moveTo(projBottom[i].x, projBottom[i].y);
-                ctx.lineTo(projTop[i].x, projTop[i].y);
-                ctx.stroke();
-            }
-
-            // افکت درخشش ملایم در مرکز
-            const centerProj = projectPerspective(0, 0, 0, centerOffsetX, centerOffsetY, perspectiveDist);
-            const glow = ctx.createRadialGradient(centerProj.x, centerProj.y, 0, centerProj.x, centerProj.y, 70);
-            glow.addColorStop(0, 'rgba(255,255,200,0.15)');
-            glow.addColorStop(1, 'rgba(255,255,200,0)');
-            ctx.fillStyle = glow;
-            ctx.beginPath();
-            ctx.arc(centerProj.x, centerProj.y, 70, 0, Math.PI * 2);
-            ctx.fill();
+            geometryDisplay.drawSolid(ctx, canvas.width, canvas.height, 'cylinder', getValues(), rotatePoint3D);
         }
 
-        // ========== تازه سازی کلی ==========
         function refresh() {
             calculateAndUpdate();
             if (currentView === 'net') {
@@ -2900,7 +1316,7 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
         function setupCanvas() {
             const container = canvas.parentElement;
             if (!container) return;
-            const containerWidth = container.clientWidth - 12;
+            const containerWidth = container.clientWidth - 10;
             canvas.width = Math.min(containerWidth, 700);
             canvas.height = canvas.width * 0.72;
             canvas.style.width = `${canvas.width}px`;
@@ -2910,15 +1326,17 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
 
         function setView(view) {
             currentView = view;
+            showNetBtn.setAttribute('aria-pressed', String(view === 'net'));
+            show3DBtn.setAttribute('aria-pressed', String(view === '3d'));
             if (view === 'net') {
                 showNetBtn.classList.add('btn-active');
                 show3DBtn.classList.remove('btn-active');
-                viewLabel.innerText = 'گسترده استوانه | مستطیل + دو دایره (مقیاس خودکار، قابل جابجایی)';
+                viewLabel.innerText = 'گسترده از یک مستطیل و دو دایره تشکیل شده است.';
                 canvas.style.cursor = 'grab';
             } else {
                 show3DBtn.classList.add('btn-active');
                 showNetBtn.classList.remove('btn-active');
-                viewLabel.innerText = 'نمای سه بعدی استوانه | کلیک و بکشید برای چرخش | همیشه در صفحه';
+                viewLabel.innerText = 'برای چرخاندن شکل، تصویر را بکشید یا از کلیدهای جهت‌دار استفاده کنید.';
                 canvas.style.cursor = 'grab';
             }
             refresh();
@@ -3024,342 +1442,77 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             netOffsetX = 0;
             netOffsetY = 0;
             rotationY = -0.65;
-            rotationX = 0.35;
+            rotationX = -0.38;
             refresh();
         });
         showNetBtn.addEventListener('click', () => setView('net'));
         show3DBtn.addEventListener('click', () => setView('3d'));
+
+
+        const resetView = document.getElementById('resetView');
+        resetView.addEventListener('click', () => {
+            netOffsetX = netOffsetY = 0;
+            rotationX = -0.38;
+            rotationY = -0.65;
+            refresh();
+        });
+        canvas.addEventListener('keydown', event => {
+            const steps = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]};
+            const step = steps[event.key];
+            if (!step) return;
+            event.preventDefault();
+            const [x, y] = step;
+            if (currentView === '3d') {
+                rotationY += x * 0.14;
+                rotationX = Math.max(-1.5, Math.min(1.5, rotationX + y * 0.14));
+            } else {
+                netOffsetX = Math.max(-canvas.width * 0.3, Math.min(canvas.width * 0.3, netOffsetX + x * 12));
+                netOffsetY = Math.max(-canvas.height * 0.3, Math.min(canvas.height * 0.3, netOffsetY + y * 12));
+            }
+            refresh();
+        });
 
         window.addEventListener('resize', () => setTimeout(setupCanvas, 100));
         setupCanvas();
         setView('net');
     })();
 </script>
-</body>
-</html>
 </template>
-
 <template id="cone">
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
-<html lang="fa" dir="rtl" style="height: 100%;">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>مخروط | نمای سه بعدی </title>
-    <style>
-
-html,body{direction:rtl;unicode-bidi:embed;}
-input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;text-align:right;}
-.result-item{gap:10px;}
-.result-value{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;direction:ltr;text-align:left;}
-#dimensions{direction:rtl;text-align:right;display:inline-block;}
-.unit{white-space:nowrap;}
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html {
-            height: 100%;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100%;
-            position: relative;
-            padding: 8px;
-            overflow-x: hidden;
-        }
-
-        /* پس‌زمینه ثابت بدون لرزش */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, #0f172a 0%, #172554 35%, #134e4a 100%);
-            z-index: -2;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.15);
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            width: 100%;
-            position: relative;
-            z-index: 1;
-        }
-
-        h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 12px;
-            font-size: 18px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-            padding: 0 4px;
-        }
-
-        .main-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-            border-radius: 24px;
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .two-columns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .input-panel {
-            flex: 1;
-            min-width: 240px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .drawing-panel {
-            flex: 1.2;
-            min-width: 260px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .input-group {
-            margin-bottom: 14px;
-        }
-
-        label {
-            display: block;
-            color: white;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px 12px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            background: rgba(255, 255, 255, 0.95);
-            font-family: monospace;
-            font-weight: bold;
-        }
-
-        input:focus {
-            outline: none;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(255, 200, 80, 0.4);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0 12px;
-        }
-
-        button {
-            flex: 1;
-            padding: 8px 6px;
-            border: none;
-            border-radius: 40px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.1s;
-        }
-
-        button:active {
-            transform: scale(0.97);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ffb347, #ff8c1a);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #2c5a4a;
-            color: white;
-        }
-
-        .results-panel {
-            background: rgba(0, 0, 0, 0.45);
-            border-radius: 16px;
-            padding: 12px;
-            margin-top: 12px;
-        }
-
-        .result-item {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: baseline;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
-            gap: 8px;
-        }
-
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
-        .result-label {
-            font-size: 13px;
-            font-weight: 600;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2px 8px;
-            border-radius: 20px;
-        }
-
-        .result-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffd966;
-            text-align: left;
-            direction: ltr;
-            font-family: monospace;
-        }
-
-        .formula-text {
-            font-size: 9px;
-            display: inline-block;
-            color: #ffd966aa;
-            font-weight: normal;
-            margin-right: 6px;
-        }
-
-        .unit {
-            font-size: 11px;
-            margin-right: 3px;
-            font-weight: normal;
-        }
-
-        .view-toggle {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .view-btn {
-            flex: 1;
-            padding: 8px 4px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            font-size: 13px;
-            font-weight: bold;
-            border-radius: 40px;
-            cursor: pointer;
-        }
-
-        .btn-active {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            border-color: transparent;
-        }
-
-        .canvas-container {
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 20px;
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 360px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        #mainCanvas {
-            background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.05), transparent 45%),
-                        linear-gradient(180deg, #18233f 0%, #0f1628 100%);
-            border-radius: 18px;
-            display: block;
-            width: 100%;
-            height: auto;
-            cursor: grab;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        #mainCanvas:active {
-            cursor: grabbing;
-        }
-
-        .info-text {
-            color: rgba(255, 255, 255, 0.7);
-            text-align: center;
-            margin-top: 10px;
-            font-size: 10px;
-        }
-
-        .badge {
-            background: rgba(255, 200, 100, 0.2);
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 9px;
-            display: inline-block;
-            margin: 2px;
-        }
-
-        @media (max-width: 550px) {
-            body { padding: 5px; }
-            .input-panel, .drawing-panel { min-width: 100%; }
-            .result-value { font-size: 15px; }
-            .result-label { font-size: 11px; }
-            .formula-text { display: block; margin-top: 3px; }
-        }
-    </style>
-</head>
-<body>
 <div class="container">
-    <h1>🔺 مخروط | نمای سه بعدی حرفه‌ای + گسترده (بدون تداخل)</h1>
+    <h1>مخروط</h1>
     <div class="main-card">
         <div class="two-columns">
-            <div class="input-panel">
-                <div class="input-group"><label>📏 شعاع قاعده (r)</label><input type="number" id="radius" value="5" step="any"></div>
-                <div class="input-group"><label>📏 ارتفاع مخروط (h)</label><input type="number" id="height" value="12" step="any"></div>
-                <div class="input-group"><label>📏 یال مخروط (L)</label><input type="number" id="slant" value="13" step="any"></div>
-                <div class="btn-group"><button id="updateBtn" class="btn-primary">✨ بروزرسانی</button><button id="resetBtn" class="btn-secondary">🔄 بازنشانی</button></div>
-                <div class="results-panel">
-                    <div class="result-item"><span class="result-label">🧮 مساحت کل</span><span class="result-value"><span id="totalArea">0</span><span class="unit">cm²</span><span class="formula-text">(πr² + πrL)</span></span></div>
-                    <div class="result-item"><span class="result-label">📐 مساحت جانبی</span><span class="result-value"><span id="lateralArea">0</span><span class="unit">cm²</span><span class="formula-text">(πrL)</span></span></div>
-                    <div class="result-item"><span class="result-label">💧 حجم</span><span class="result-value"><span id="volume">0</span><span class="unit">cm³</span><span class="formula-text">(⅓ × πr² × h)</span></span></div>
-                    <div class="result-item"><span class="result-label">🔍 مشخصات</span><span class="result-value" style="font-size: 14px;"><span id="dimensions">r=5, h=12, L=13</span></span></div>
-                </div>
-                <div class="info-text">⚡ با ماوس بکشید تا بچرخانید | گسترده بدون تداخل</div>
-            </div>
             <div class="drawing-panel">
-                <div class="view-toggle"><button id="showNetBtn" class="view-btn btn-active">🧩 گسترده (Net)</button><button id="show3DBtn" class="view-btn">📦 نمای ۳ بعدی</button></div>
-                <div class="canvas-container"><canvas id="mainCanvas" width="600" height="480"></canvas></div>
-                <div class="info-text"><span class="badge" id="viewLabel">گسترده مخروط | چیدمان افقی</span><span class="badge">✨ جدا و بدون تداخل</span></div>
+                <div class="view-toggle"><button id="showNetBtn" aria-pressed="true" class="view-btn btn-active">گسترده</button><button id="show3DBtn" aria-pressed="false" class="view-btn">نمای سه‌بعدی</button></div>
+                <div class="canvas-container"><canvas id="mainCanvas" tabindex="0" role="img" aria-label="نمای هندسی شکل" aria-describedby="viewLabel" width="600" height="480"></canvas></div>
+                
+                    <div class="display-tools">
+                        <ul class="legend" aria-label="راهنمای رنگ‌ها و خطوط">
+                            <li><span class="swatch base" aria-hidden="true"></span>قاعده</li>
+                            <li><span class="swatch side" aria-hidden="true"></span>سطح جانبی</li>
+                            
+                        </ul>
+                        <button type="button" class="reset-view" id="resetView">بازنشانی نما</button>
+                    </div>
+                    <p class="info-text" id="viewLabel">گسترده از یک دایره و یک قطاع دایره تشکیل شده است.</p>
+            </div>
+            <div class="input-panel"><h2>ابعاد شکل</h2>
+                <div class="input-group"><label for="radius">شعاع قاعده (r)</label><input type="number" id="radius" value="5" step="any"></div>
+                <div class="input-group"><label for="height">ارتفاع مخروط (h)</label><input type="number" id="height" value="12" step="any"></div>
+                <div class="input-group"><label for="slant">ارتفاع مایل مخروط (L)</label><input type="number" id="slant" value="13" step="any"></div>
+                <div class="btn-group"><button id="updateBtn" class="btn-primary">محاسبه</button><button id="resetBtn" class="btn-secondary">بازنشانی</button></div>
+                <div class="results-panel" aria-live="polite"><h2>نتایج محاسبه</h2>
+                    <div class="result-item"><span class="result-label">مساحت کل</span><span class="result-value"><span id="totalArea">0</span><span class="unit">cm²</span></span><span class="formula-text">(πr² + πrL)</span></div>
+                    <div class="result-item"><span class="result-label">مساحت جانبی</span><span class="result-value"><span id="lateralArea">0</span><span class="unit">cm²</span></span><span class="formula-text">(πrL)</span></div>
+                    <div class="result-item"><span class="result-label">حجم</span><span class="result-value"><span id="volume">0</span><span class="unit">cm³</span></span><span class="formula-text">(⅓ × πr² × h)</span></div>
+                    <div class="result-item"><span class="result-label">مشخصات</span><span class="result-value"><span id="dimensions">r=5, h=12, L=13</span></span></div>
+                </div>
+                
             </div>
         </div>
     </div>
 </div>
-
 <script>
     (function(){
         const radiusInput = document.getElementById('radius');
@@ -3381,7 +1534,7 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
         let netOffsetX = 0, netOffsetY = 0;
         let isDragging = false;
         let lastDragX = 0, lastDragY = 0;
-        let rotationY = -0.65, rotationX = 0.35;
+        let rotationY = -0.65, rotationX = -0.38;
         let isDragging3D = false;
         let lastDragX3D = 0, lastDragY3D = 0;
 
@@ -3425,204 +1578,17 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             return { x: x1, y: y2, z: z2 };
         }
 
-        function projectPerspective(x, y, z, cx, cy, perspective = 1100) {
-            const scale = perspective / (perspective + z);
-            return { x: cx + x * scale, y: cy + y * scale };
-        }
-
-        // ========== نمای گسترده با مقیاس اصلی ==========
         function drawNet() {
-            let { r, h, L } = getValues();
-            const width = canvas.width, height = canvas.height;
-            if(width <= 0 || height <= 0) return;
-            ctx.clearRect(0, 0, width, height);
-            
-            ctx.beginPath();
-            ctx.ellipse(width/2, height*0.72, width*0.15, height*0.045, 0, 0, Math.PI*2);
-            const shadow = ctx.createRadialGradient(width/2, height*0.72, 5, width/2, height*0.72, width*0.15);
-            shadow.addColorStop(0, "rgba(0,0,0,.35)");
-            shadow.addColorStop(1, "rgba(0,0,0,0)");
-            ctx.fillStyle = shadow;
-            ctx.fill();
-            
-            const circleRadius = r;
-            const sectorRadius = L;
-            const sectorAngle = (2 * Math.PI * r) / L;
-            
-            const circleDiameter = circleRadius * 2;
-            const sectorWidth = sectorRadius * 2;
-            const sectorHeight = sectorRadius * Math.sin(sectorAngle / 2) * 2;
-            const maxShapeWidth = Math.max(circleDiameter, sectorWidth);
-            const maxShapeHeight = Math.max(circleDiameter, sectorHeight);
-            const gap = maxShapeWidth * 0.25;
-            const totalWidth = maxShapeWidth * 2 + gap;
-            const totalHeight = maxShapeHeight;
-            
-            const marginPercent = 0.08;
-            const availableWidth = width * (1 - marginPercent * 2);
-            const availableHeight = height * (1 - marginPercent * 2);
-            
-            let scale = Math.min(availableWidth / totalWidth, availableHeight / totalHeight);
-            scale = Math.min(scale, 7);
-            scale = Math.max(scale, 0.3);
-            
-            const scaledCircleRadius = circleRadius * scale;
-            const scaledSectorRadius = sectorRadius * scale;
-            const scaledGap = gap * scale;
-            
-            const globalCenterX = width / 2 + netOffsetX;
-            const globalCenterY = height / 2 + netOffsetY;
-            
-            const circleCenterX = globalCenterX + (scaledSectorRadius + scaledGap/2);
-            const circleCenterY = globalCenterY;
-            const sectorCenterX = globalCenterX - (scaledCircleRadius + scaledGap/2);
-            const sectorCenterY = globalCenterY;
-            
-            ctx.beginPath();
-            ctx.arc(circleCenterX, circleCenterY, scaledCircleRadius, 0, 2 * Math.PI);
-            ctx.fillStyle = "rgba(255,160,80,0.92)";
-            ctx.fill();
-            ctx.strokeStyle = "#ffdd99";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            
-            const startAngle = -sectorAngle / 2;
-            const endAngle = sectorAngle / 2;
-            ctx.beginPath();
-            ctx.arc(sectorCenterX, sectorCenterY, scaledSectorRadius, startAngle, endAngle);
-            ctx.lineTo(sectorCenterX, sectorCenterY);
-            ctx.closePath();
-            ctx.fillStyle = "rgba(74,144,226,0.88)";
-            ctx.fill();
-            ctx.stroke();
-            
-            ctx.font = "11px system-ui";
-            ctx.fillStyle = "#ffddaa";
-            ctx.fillText("قاعده", circleCenterX - scaledCircleRadius/2, circleCenterY + scaledCircleRadius + 8);
-            ctx.fillText("سطح جانبی", sectorCenterX - scaledSectorRadius/2, sectorCenterY - scaledSectorRadius - 5);
-            ctx.font = "9px monospace";
-            ctx.fillStyle = "#ffddaa88";
-            ctx.fillText(`r = ${r.toFixed(2)}`, circleCenterX - scaledCircleRadius/2, circleCenterY + scaledCircleRadius + 20);
-            ctx.fillText(`L = ${L.toFixed(2)}`, sectorCenterX - scaledSectorRadius/2, sectorCenterY - scaledSectorRadius - 18);
+            geometryDisplay.drawNet(ctx, canvas.width, canvas.height, 'cone', getValues(),
+                { x: netOffsetX, y: netOffsetY });
+            const { r, L } = getValues();
+            viewLabel.textContent = L > r
+                ? 'گسترده از یک دایره و یک قطاع دایره تشکیل شده است.'
+                : 'برای رسم گسترده، ارتفاع مایل باید از شعاع قاعده بزرگ‌تر باشد.';
         }
 
-        // ========== نمای ۳ بعدی با مقیاس اصلی ==========
         function draw3D() {
-            let { r, h, L } = getValues();
-            const width = canvas.width, height = canvas.height;
-            
-            if (width <= 0 || height <= 0 || r <= 0 || h <= 0) return;
-            
-            const bg = ctx.createLinearGradient(0, 0, width, height);
-            bg.addColorStop(0, '#12192f');
-            bg.addColorStop(1, '#070b16');
-            ctx.fillStyle = bg;
-            ctx.fillRect(0, 0, width, height);
-            
-            const cx = width / 2;
-            const shadowGrad = ctx.createRadialGradient(cx, height - 55, 0, cx, height - 55, 130);
-            shadowGrad.addColorStop(0, 'rgba(0,0,0,0.45)');
-            shadowGrad.addColorStop(0.45, 'rgba(0,0,0,0.20)');
-            shadowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-            ctx.fillStyle = shadowGrad;
-            ctx.beginPath();
-            ctx.ellipse(cx, height - 55, 130, 18, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            const segments = Math.max(48, Math.floor(48 * Math.sqrt(r / 5)));
-            
-            const baseVertices3D = [];
-            for (let i = 0; i <= segments; i++) {
-                const angle = i * 2 * Math.PI / segments;
-                baseVertices3D.push({ x: r * Math.cos(angle), y: -h/2, z: r * Math.sin(angle) });
-            }
-            const apex3D = { x: 0, y: h/2, z: 0 };
-            
-            const rotatedBase = baseVertices3D.map(p => rotatePoint3D(p.x, p.y, p.z));
-            const rotatedApex = rotatePoint3D(apex3D.x, apex3D.y, apex3D.z);
-            
-            const tempProjectedBase = rotatedBase.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, 700));
-            const tempProjectedApex = projectPerspective(rotatedApex.x, rotatedApex.y, rotatedApex.z, 0, 0, 700);
-            
-            let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-            [...tempProjectedBase, tempProjectedApex].forEach(p => {
-                minX = Math.min(minX, p.x);
-                maxX = Math.max(maxX, p.x);
-                minY = Math.min(minY, p.y);
-                maxY = Math.max(maxY, p.y);
-            });
-            
-            const targetMargin = 0.78;
-            let fitScale = 1;
-            if (maxX - minX > 0 && maxY - minY > 0) {
-                fitScale = Math.min((width * targetMargin) / (maxX - minX), (height * targetMargin) / (maxY - minY));
-            }
-            
-            const finalRotatedBase = rotatedBase.map(p => ({ x: p.x * fitScale, y: p.y * fitScale, z: p.z }));
-            const finalRotatedApex = { x: rotatedApex.x * fitScale, y: rotatedApex.y * fitScale, z: rotatedApex.z };
-            
-            const finalTempBase = finalRotatedBase.map(p => projectPerspective(p.x, p.y, p.z, 0, 0, 700));
-            const finalTempApex = projectPerspective(finalRotatedApex.x, finalRotatedApex.y, finalRotatedApex.z, 0, 0, 700);
-            
-            let finalMinX = Infinity, finalMaxX = -Infinity, finalMinY = Infinity, finalMaxY = -Infinity;
-            [...finalTempBase, finalTempApex].forEach(p => {
-                finalMinX = Math.min(finalMinX, p.x);
-                finalMaxX = Math.max(finalMaxX, p.x);
-                finalMinY = Math.min(finalMinY, p.y);
-                finalMaxY = Math.max(finalMaxY, p.y);
-            });
-            
-            const centerOffsetX = (width - (finalMinX + finalMaxX)) / 2;
-            const centerOffsetY = (height - (finalMinY + finalMaxY)) / 2;
-            
-            const projectedBase = finalRotatedBase.map(p => projectPerspective(p.x, p.y, p.z, centerOffsetX, centerOffsetY, 700));
-            const projectedApex = projectPerspective(finalRotatedApex.x, finalRotatedApex.y, finalRotatedApex.z, centerOffsetX, centerOffsetY, 700);
-            
-            for (let i = 0; i < segments; i++) {
-                ctx.beginPath();
-                ctx.moveTo(projectedBase[i].x, projectedBase[i].y);
-                ctx.lineTo(projectedBase[i + 1].x, projectedBase[i + 1].y);
-                ctx.lineTo(projectedApex.x, projectedApex.y);
-                ctx.closePath();
-                const grad = ctx.createLinearGradient(projectedBase[i].x, projectedBase[i].y, projectedApex.x, projectedApex.y);
-                grad.addColorStop(0, `rgba(80, 160, 210, 0.88)`);
-                grad.addColorStop(0.5, `rgba(180, 110, 70, 0.88)`);
-                grad.addColorStop(1, `rgba(220, 80, 50, 0.85)`);
-                ctx.fillStyle = grad;
-                ctx.fill();
-                ctx.strokeStyle = "rgba(255, 220, 150, 0.4)";
-                ctx.lineWidth = 0.8;
-                ctx.stroke();
-            }
-            
-            ctx.beginPath();
-            ctx.moveTo(projectedBase[0].x, projectedBase[0].y);
-            for (let i = 1; i <= segments; i++) ctx.lineTo(projectedBase[i].x, projectedBase[i].y);
-            ctx.closePath();
-            ctx.fillStyle = "rgba(210, 150, 70, 0.94)";
-            ctx.fill();
-            ctx.strokeStyle = "#ffcc88";
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            
-            ctx.lineWidth = 1.2;
-            ctx.strokeStyle = '#ffdd99';
-            const edgeStep = Math.max(1, Math.floor(segments / 12));
-            for (let i = 0; i <= segments; i += edgeStep) {
-                ctx.beginPath();
-                ctx.moveTo(projectedBase[i].x, projectedBase[i].y);
-                ctx.lineTo(projectedApex.x, projectedApex.y);
-                ctx.stroke();
-            }
-            
-            const glow = ctx.createRadialGradient(projectedApex.x, projectedApex.y, 0, projectedApex.x, projectedApex.y, 35);
-            glow.addColorStop(0, 'rgba(255,255,255,0.55)');
-            glow.addColorStop(0.4, 'rgba(255,255,255,0.18)');
-            glow.addColorStop(1, 'rgba(255,255,255,0)');
-            ctx.fillStyle = glow;
-            ctx.beginPath();
-            ctx.arc(projectedApex.x, projectedApex.y, 35, 0, Math.PI * 2);
-            ctx.fill();
+            geometryDisplay.drawSolid(ctx, canvas.width, canvas.height, 'cone', getValues(), rotatePoint3D);
         }
 
         function updateSlant() {
@@ -3650,7 +1616,7 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
         function setupCanvas() {
             const container = canvas.parentElement;
             if(!container) return;
-            const containerWidth = container.clientWidth - 12;
+            const containerWidth = container.clientWidth - 10;
             canvas.width = Math.min(containerWidth, 700);
             canvas.height = canvas.width * 0.72;
             canvas.style.width = `${canvas.width}px`;
@@ -3660,15 +1626,17 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
         
         function setView(v) {
             currentView = v;
+            showNetBtn.setAttribute('aria-pressed', String(v === 'net'));
+            show3DBtn.setAttribute('aria-pressed', String(v === '3d'));
             if(v === 'net') {
                 showNetBtn.classList.add('btn-active');
                 show3DBtn.classList.remove('btn-active');
-                viewLabel.innerText = 'گسترده مخروط | بدون تداخل';
+                viewLabel.innerText = 'گسترده از یک دایره و یک قطاع دایره تشکیل شده است.';
                 canvas.style.cursor = 'grab';
             } else {
                 show3DBtn.classList.add('btn-active');
                 showNetBtn.classList.remove('btn-active');
-                viewLabel.innerText = 'نمای سه بعدی | چرخش با ماوس';
+                viewLabel.innerText = 'برای چرخاندن شکل، تصویر را بکشید یا از کلیدهای جهت‌دار استفاده کنید.';
                 canvas.style.cursor = 'grab';
             }
             refresh();
@@ -3736,67 +1704,361 @@ input,select,textarea,button,label,.result-label,.formula-text{direction:rtl;tex
             heightInput.value = "12";
             slantInput.value = "13";
             netOffsetX = netOffsetY = 0;
-            rotationY = -0.65; rotationX = 0.35;
+            rotationY = -0.65; rotationX = -0.38;
             refresh();
         });
         showNetBtn.addEventListener('click', ()=>setView('net'));
         show3DBtn.addEventListener('click', ()=>setView('3d'));
         
+
+        const resetView = document.getElementById('resetView');
+        resetView.addEventListener('click', () => {
+            netOffsetX = netOffsetY = 0;
+            rotationX = -0.38;
+            rotationY = -0.65;
+            refresh();
+        });
+        canvas.addEventListener('keydown', event => {
+            const steps = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]};
+            const step = steps[event.key];
+            if (!step) return;
+            event.preventDefault();
+            const [x, y] = step;
+            if (currentView === '3d') {
+                rotationY += x * 0.14;
+                rotationX = Math.max(-1.5, Math.min(1.5, rotationX + y * 0.14));
+            } else {
+                netOffsetX = Math.max(-canvas.width * 0.3, Math.min(canvas.width * 0.3, netOffsetX + x * 12));
+                netOffsetY = Math.max(-canvas.height * 0.3, Math.min(canvas.height * 0.3, netOffsetY + y * 12));
+            }
+            refresh();
+        });
+
         window.addEventListener('resize', ()=>setTimeout(setupCanvas, 100));
         setupCanvas();
         setView('net');
     })();
 </script>
-</body>
-</html>
 </template>
+<script type="text/plain" id="geometryRenderer">
+const geometryDisplay = (() => {
+    const base = '#f4bc69';
+    const side = '#66c6e9';
+    const otherSide = '#83d0b4';
+    const ink = '#163247';
+    const edge = '#e1f1f7';
+    const turn = 2 * Math.PI;
 
+    function path(ctx, points) {
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (const point of points.slice(1)) ctx.lineTo(point.x, point.y);
+        ctx.closePath();
+    }
+
+    function ring(count, radius, y) {
+        return Array.from({ length: count }, (_, i) => {
+            const angle = i * turn / count;
+            return { x: radius * Math.cos(angle), y, z: radius * Math.sin(angle) };
+        });
+    }
+
+    function model(shape, dimensions) {
+        const { n, a, r, l, w, h } = dimensions;
+        const curved = shape === 'cone' || shape === 'cylinder';
+        const count = curved ? 72 : shape === 'cube' ? 4 : n;
+        const radius = curved ? r : (shape === 'cube' ? 0 : a / (2 * Math.sin(Math.PI / n)));
+        const lower = shape === 'cube'
+            ? [[-l/2, -w/2], [l/2, -w/2], [l/2, w/2], [-l/2, w/2]].map(([x, z]) => ({ x, y: h/2, z }))
+            : ring(count, radius, h/2);
+        const upper = lower.map(point => ({ ...point, y: -h/2 }));
+        const apex = { x: 0, y: -h/2, z: 0 };
+        const pointed = shape === 'pyramid' || shape === 'cone';
+        const faces = [{ points: lower, color: base, outline: true }];
+        if (!pointed) faces.push({ points: upper, color: base, outline: true });
+        for (let i = 0; i < count; i++) {
+            const next = (i + 1) % count;
+            faces.push({
+                points: pointed ? [lower[i], lower[next], apex] : [lower[i], lower[next], upper[next], upper[i]],
+                color: shape === 'cube' && i % 2 ? otherSide : side,
+                outline: !curved,
+            });
+        }
+        return faces;
+    }
+
+    function shade(color, factor) {
+        const rgb = [1, 3, 5].map(i => Math.round(parseInt(color.slice(i, i + 2), 16) * factor));
+        return 'rgb(' + rgb.join(',') + ')';
+    }
+
+    function drawSolid(ctx, width, height, shape, dimensions, rotate) {
+        const magnitude = Math.max(...Object.values(dimensions).filter(value => typeof value === 'number'));
+        const normalized = Object.fromEntries(Object.entries(dimensions).map(([key, value]) =>
+            [key, typeof value === 'number' && key !== 'n' ? value / magnitude : value]));
+        const faces = model(shape, normalized).map(face => {
+            const points = face.points.map(({ x, y, z }) => rotate(x, y, z));
+            const [p, q, r] = points;
+            const u = { x: q.x - p.x, y: q.y - p.y, z: q.z - p.z };
+            const v = { x: r.x - p.x, y: r.y - p.y, z: r.z - p.z };
+            const normal = { x: u.y*v.z - u.z*v.y, y: u.z*v.x - u.x*v.z, z: u.x*v.y - u.y*v.x };
+            const orientation = normal.x*p.x + normal.y*p.y + normal.z*p.z < 0 ? -1 : 1;
+            const length = Math.hypot(normal.x, normal.y, normal.z);
+            const lighting = (-0.42*normal.x - 0.52*normal.y + 0.74*normal.z) * orientation / length;
+            const depth = points.reduce((sum, point) => sum + point.z, 0) / points.length;
+            return { ...face, points, depth, visible: normal.z * orientation > 0, color: shade(face.color, 0.65 + 0.35 * Math.max(0, lighting)) };
+        });
+
+        ctx.clearRect(0, 0, width, height);
+        const points = faces.flatMap(face => face.points);
+        const xs = points.map(point => point.x);
+        const ys = points.map(point => point.y);
+        const left = Math.min(...xs), right = Math.max(...xs);
+        const top = Math.min(...ys), bottom = Math.max(...ys);
+        const scale = Math.min(width * 0.79 / (right - left), height * 0.76 / (bottom - top));
+        if (!Number.isFinite(scale) || scale <= 0) return;
+        const project = point => ({
+            x: width / 2 + (point.x - left / 2 - right / 2) * scale,
+            y: height / 2 + (point.y - top / 2 - bottom / 2) * scale,
+        });
+
+        ctx.save();
+        ctx.lineJoin = 'round';
+        for (const face of faces.sort((a, b) => a.depth - b.depth)) {
+            if (!face.visible) continue;
+            path(ctx, face.points.map(project));
+            ctx.fillStyle = face.color;
+            ctx.fill();
+            ctx.strokeStyle = face.outline ? edge : face.color;
+            ctx.lineWidth = face.outline ? 1.6 : 1;
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    const point = (x, y) => ({ x, y });
+    const rect = (x, y, w, h) => [point(x,y), point(x+w,y), point(x+w,y+h), point(x,y+h)];
+    const arc = (x, y, radius, start, sweep) => Array.from({ length: 97 }, (_, i) => {
+        const angle = start + i * sweep / 96;
+        return point(x + radius * Math.cos(angle), y + radius * Math.sin(angle));
+    });
+
+    function net(shape, { n, a, h, l, w, r, L }) {
+        const faces = [];
+        const folds = [];
+        const add = (points, color, label, center, capacity, area, faceHeight) =>
+            faces.push({ points, color, label, center, capacity, area, faceHeight });
+        const fold = (x1, y1, x2, y2) => folds.push([point(x1, y1), point(x2, y2)]);
+        const circle = (x, y) => add(arc(x, y, r, 0, turn), base, 'قاعده', point(x, y), r * 1.4);
+
+        if (shape === 'pyramid') {
+            const radius = a / (2 * Math.sin(Math.PI / n));
+            const apothem = a / (2 * Math.tan(Math.PI / n));
+            const slope = Math.hypot(h, apothem);
+            const corners = Array.from({ length: n }, (_, i) => {
+                const angle = -Math.PI / 2 + (i + 0.5) * turn / n;
+                return point(radius * Math.cos(angle), radius * Math.sin(angle));
+            });
+            add(corners, base, 'قاعده', point(0, 0), apothem * 1.7);
+            for (let i = 0; i < n; i++) {
+                const p = corners[i], q = corners[(i + 1) % n];
+                const cx = (p.x + q.x) / 2, cy = (p.y + q.y) / 2;
+                const tip = point(cx * (1 + slope/apothem), cy * (1 + slope/apothem));
+                add([p, q, tip], side, 'وجه', point((p.x+q.x+tip.x)/3, (p.y+q.y+tip.y)/3), Math.min(a * 0.53, slope * 0.7));
+                fold(p.x, p.y, q.x, q.y);
+            }
+        } else if (shape === 'prism' || shape === 'cube') {
+            const isBox = shape === 'cube';
+            const widths = isBox ? [w, l, w, l] : Array(n).fill(a);
+            const names = ['چپ', 'جلو', 'راست', 'پشت'];
+            let x = 0;
+            widths.forEach((length, i) => {
+                add(rect(x, 0, length, h), isBox && i % 2 === 0 ? otherSide : side,
+                    isBox ? names[i] : String(i + 1), point(x + length/2, h/2), Math.min(length, h) * 0.78, isBox ? length * h : null, h);
+                if (i > 0) fold(x, 0, x, h);
+                x += length;
+            });
+            if (isBox) {
+                add(rect(w, -w, l, w), base, 'بالا', point(w+l/2, -w/2), Math.min(l, w) * 0.78, l * w, w);
+                add(rect(w, h, l, w), base, 'پایین', point(w+l/2, h+w/2), Math.min(l, w) * 0.78, l * w, w);
+                fold(w, 0, w+l, 0);
+                fold(w, h, w+l, h);
+            } else {
+                const radius = a / (2 * Math.sin(Math.PI / n));
+                const apothem = a / (2 * Math.tan(Math.PI / n));
+                for (const [y, angle] of [[-apothem, Math.PI/2], [h+apothem, -Math.PI/2]]) {
+                    const polygon = Array.from({ length: n }, (_, i) => {
+                        const t = angle + (i + 0.5) * turn / n;
+                        return point(a/2 + radius * Math.cos(t), y + radius * Math.sin(t));
+                    });
+                    add(polygon, base, 'قاعده', point(a/2, y), apothem * 1.7);
+                }
+                fold(0, 0, a, 0);
+                fold(0, h, a, h);
+            }
+        } else if (shape === 'cylinder') {
+            const circumference = turn * r;
+            add(rect(0, 0, circumference, h), side, 'سطح جانبی', point(circumference/2, h/2), Math.min(circumference*0.8, h*2));
+            circle(circumference/2, -r);
+            circle(circumference/2, h+r);
+        } else {
+            if (L <= r) return { faces, folds };
+            const sweep = turn * (r / L);
+            const points = [point(0, 0), ...arc(0, 0, L, -sweep / 2, sweep)];
+            add(points, side, 'قطاع', point(L * 0.58, 0), Math.min(L * 0.75, r * 1.5));
+            circle(L + r * 1.25, 0);
+        }
+        return { faces, folds };
+    }
+
+    function drawNet(ctx, width, height, shape, dimensions, offset) {
+        ctx.clearRect(0, 0, width, height);
+        const { faces, folds } = net(shape, dimensions);
+        if (!faces.length) return;
+        const points = faces.flatMap(face => face.points);
+        const xs = points.map(p => p.x), ys = points.map(p => p.y);
+        const left = Math.min(...xs), right = Math.max(...xs);
+        const top = Math.min(...ys), bottom = Math.max(...ys);
+        const scale = Math.min(width * 0.86 / (right - left), height * 0.81 / (bottom - top));
+        if (!Number.isFinite(scale) || scale <= 0) return;
+        const project = p => point(width/2 + (p.x - left/2 - right/2)*scale + offset.x,
+            height/2 + (p.y - top/2 - bottom/2)*scale + offset.y);
+        ctx.save();
+        ctx.lineJoin = 'round';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        for (const face of faces) {
+            path(ctx, face.points.map(project));
+            ctx.fillStyle = face.color;
+            ctx.fill();
+            ctx.strokeStyle = edge;
+            ctx.lineWidth = 1.6;
+            ctx.stroke();
+            const labelWidth = face.capacity * scale;
+            const font = Math.min(22, Math.max(14, width * 0.03));
+            ctx.font = '700 ' + font + 'px Tahoma, Arial, sans-serif';
+            if (ctx.measureText(face.label).width <= labelWidth) {
+                const center = project(face.center);
+                ctx.fillStyle = ink;
+                const area = face.area == null ? '' : face.area.toFixed(1);
+                const showArea = area && face.faceHeight * scale >= font * 2.5
+                    && ctx.measureText(area).width <= labelWidth;
+                ctx.fillText(face.label, center.x, center.y - (showArea ? font * 0.5 : 0));
+                if (showArea) ctx.fillText(area, center.x, center.y + font * 0.65);
+            }
+        }
+        ctx.strokeStyle = ink;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 4]);
+        for (const [start, end] of folds) {
+            const a = project(start), b = project(end);
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    return { drawSolid, drawNet };
+})();
+
+</script>
 <script>
+const home = document.getElementById('home');
+const viewer = document.getElementById('viewer');
+const back = document.getElementById('backBtn');
+const labStyles = document.getElementById('labStyles').textContent;
+const geometryRenderer = document.getElementById('geometryRenderer').textContent;
+let activeCard;
 
-function startLab(){
-
-const shape=document.getElementById("shape").value;
-
-if(!shape){
-alert("لطفاً یک شکل را انتخاب کنید");
-return;
+for (const card of document.querySelectorAll('.shape-card')) {
+  const name = card.dataset.name;
+  card.addEventListener('click', () => {
+    activeCard = card;
+    const content = document.getElementById(card.dataset.shape).innerHTML;
+    viewer.title = 'آزمایشگاه ' + name;
+    viewer.srcdoc = '<!doctype html><html lang="fa" dir="rtl"><head>' +
+      '<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
+      '<title>' + name + '</title><style>' + labStyles + '</style></head><body>' +
+      '<' + 'script>' + geometryRenderer + '</' + 'script>' + content + '</body></html>';
+    home.hidden = true;
+    document.body.classList.add('lab-active');
+    viewer.hidden = back.hidden = false;
+    back.focus();
+  });
 }
+back.addEventListener('click', () => {
+  viewer.hidden = back.hidden = true;
+  viewer.removeAttribute('srcdoc');
+  document.body.classList.remove('lab-active');
+  home.hidden = false;
+  activeCard.focus();
+});
 
-const template=document.getElementById(shape);
-
-if(!template){
-alert("کد این شکل پیدا نشد");
-return;
+const palette = ['#d5eee5', '#83c6b3', '#348b77', '#1e6456'];
+function face(ctx, points, fill) {
+  ctx.beginPath();
+  points.forEach(([x, y], index) => index ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+  ctx.closePath();
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.stroke();
 }
-
-const html=template.innerHTML;
-
-const blob=new Blob([html],{type:"text/html"});
-const url=URL.createObjectURL(blob);
-
-const viewer=document.getElementById("viewer");
-
-viewer.src=url;
-viewer.style.display="block";
-
-document.getElementById("home").style.display="none";
-document.getElementById("backBtn").style.display="inline-block";
-
-}
-
-function goBack(){
-
-const viewer=document.getElementById("viewer");
-
-viewer.style.display="none";
-viewer.src="";
-
-document.getElementById("home").style.display="block";
-document.getElementById("backBtn").style.display="none";
-
+for (const preview of document.querySelectorAll('.shape-preview')) {
+  const ctx = preview.getContext('2d');
+  ctx.scale(2, 2);
+  ctx.lineJoin = 'round';
+  ctx.lineWidth = 1.7;
+  ctx.strokeStyle = palette[3];
+  const [light, mid, dark] = palette;
+  switch (preview.parentElement.dataset.shape) {
+    case 'pyramid':
+      face(ctx, [[73, 15], [105, 67], [78, 84], [45, 71]], light);
+      face(ctx, [[73, 15], [78, 84], [45, 71]], mid);
+      face(ctx, [[73, 15], [105, 67], [78, 84]], dark);
+      break;
+    case 'prism':
+      face(ctx, [[49, 36], [76, 49], [76, 84], [49, 71]], mid);
+      face(ctx, [[76, 49], [104, 35], [104, 70], [76, 84]], dark);
+      face(ctx, [[49, 36], [62, 21], [91, 20], [104, 35], [76, 49]], light);
+      break;
+    case 'cube':
+      face(ctx, [[40, 38], [81, 50], [81, 81], [40, 69]], mid);
+      face(ctx, [[81, 50], [111, 36], [111, 67], [81, 81]], dark);
+      face(ctx, [[40, 38], [72, 24], [111, 36], [81, 50]], light);
+      break;
+    case 'cylinder':
+      ctx.beginPath();
+      ctx.moveTo(49, 31);
+      ctx.lineTo(49, 69);
+      ctx.bezierCurveTo(49, 86, 103, 86, 103, 69);
+      ctx.lineTo(103, 31);
+      ctx.fillStyle = mid;
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(76, 31, 27, 11, 0, 0, 2 * Math.PI);
+      ctx.fillStyle = light;
+      ctx.fill();
+      ctx.stroke();
+      break;
+    case 'cone':
+      ctx.beginPath();
+      ctx.moveTo(76, 17);
+      ctx.lineTo(48, 67);
+      ctx.bezierCurveTo(45, 87, 107, 87, 104, 67);
+      ctx.closePath();
+      const gradient = ctx.createLinearGradient(48, 0, 104, 0);
+      gradient.addColorStop(0, light);
+      gradient.addColorStop(1, dark);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.stroke();
+      break;
+  }
 }
 
 </script>
-
 </body>
 </html>
